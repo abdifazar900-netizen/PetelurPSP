@@ -248,27 +248,29 @@ function loadFollowUp() {
     });
 }
 
-function markSolved(row) {
-  if(!confirm("Yakin masalah ini sudah selesai?")) return;
+// ... kode fungsi loadTotalPopulasi & loadFollowUp di atas ...
+
+function showSection(sectionId, el) {
+  // Sembunyikan semua section
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
+  // Tampilkan section yang dipilih
+  document.getElementById(sectionId).classList.add('active-section');
   
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    body: JSON.stringify({ action: "markSolved", row: row })
-  }).then(() => {
-    alert("Berhasil diperbarui!");
-    loadFollowUp(); // Refresh list
-  });
+  // Update tampilan menu bawah (navbar)
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if(el) el.classList.add('active');
+
+  // PANGGIL DATA HANYA JIKA DI MENU HOME
+  if(sectionId === 'beranda') {
+    loadTotalPopulasi();
+    loadFollowUp();
+  }
 }
 
-// Panggil fungsi saat menu Home dibuka
-// Di dalam showSection(id, el), tambahkan:
-if(id === 'beranda') {
-  loadTotalPopulasi();
-  loadFollowUp();
-}
-// Pastikan fungsi ini dipanggil saat halaman pertama kali dibuka
-window.onload = loadTotalPopulasi;
+// Inisialisasi saat pertama kali web dibuka
+window.onload = function() {
+  showSection('beranda'); 
+};
 
   document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
 </script>
