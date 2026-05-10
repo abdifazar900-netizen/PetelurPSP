@@ -219,7 +219,8 @@ function hitungUsia() {
 }
 function loadFollowUp() {
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
-  
+  // Tambahkan baris ini untuk menghindari cache browser
+  const finalUrl = SCRIPT_URL + "?action=getMasalahAktif&t=" + new Date().getTime();
   fetch(SCRIPT_URL + "?action=getMasalahAktif")
 .then(res => {
   if (!res.ok) throw new Error('Network response was not ok');
