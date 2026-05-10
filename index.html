@@ -218,7 +218,7 @@ function hitungUsia() {
     .catch(err => console.error("Gagal memuat total populasi:", err));
 }
 function loadFollowUp() {
-  const SCRIPT_URL = "URL_WEB_APP_ANDA";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
   
   fetch(SCRIPT_URL + "?action=getMasalahAktif")
     .then(res => res.json())
