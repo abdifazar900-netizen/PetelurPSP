@@ -219,7 +219,6 @@ function hitungUsia() {
 }
 function loadFollowUp() {
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
-  // Tambahkan baris ini untuk menghindari cache browser
   const finalUrl = SCRIPT_URL + "?action=getMasalahAktif&t=" + new Date().getTime();
   fetch(SCRIPT_URL + "?action=getMasalahAktif")
 .then(res => {
@@ -261,11 +260,9 @@ function showSection(sectionId, el) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   if(el) el.classList.add('active');
 
-  // PANGGIL DATA HANYA JIKA DI MENU HOME
-  if(sectionId === 'beranda') {
-    loadTotalPopulasi();
-    loadFollowUp();
-  }
+ if(sectionId === 'beranda') {
+  loadTotalPopulasi();
+  loadFollowUp();
 }
 
 // Inisialisasi saat pertama kali web dibuka
