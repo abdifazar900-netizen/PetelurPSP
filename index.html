@@ -143,23 +143,26 @@ else if(action === 'simpanMasalah') {
 // ... kode fetch di bawahnya ...
 
     fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
-    .then(() => {
-      alert("Data " + action + " berhasil dikirim!");
-      
-      // PERBAIKAN: Jangan pakai location.reload() agar tidak logout.
-      // Cukup kosongkan input yang baru saja diisi.
-      if(action === 'simpanPopulasi') {
-        document.getElementById('kandang').value = "";
-        document.getElementById('usia_awal').value = "";
-        document.getElementById('tgl_datang').value = "";
-        document.getElementById('display_usia').innerText = "-";
-      } else if(action === 'simpanProduksi') {
-        document.getElementById('jml_telur').value = "";
-      } else if(action === 'simpanMasalah') {
-        document.getElementById('kandang_masalah').value = "";
-        document.getElementById('ket_masalah').value = "";
-      }
-    });
+.then(() => {
+  alert("Data " + action + " berhasil dikirim!");
+  
+  // TAMBAHKAN KODE INI UNTUK MEMBERSIHKAN TAMPILAN
+  if (action === 'simpanMasalah') {
+    document.getElementById('tgl_catatan').value = "";
+    document.getElementById('select_kandang').value = ""; // Membersihkan dropdown No Kandang
+    document.getElementById('ket_masalah').value = "";    // Membersihkan Keterangan
+  }
+  
+  if (action === 'simpanPopulasi') {
+    document.getElementById('kandang').value = "";
+    document.getElementById('usia_awal').value = "";
+    document.getElementById('tgl_datang').value = "";
+  }
+  
+  if (action === 'simpanProduksi') {
+    document.getElementById('jml_telur').value = "";
+  }
+});
   }
 
 // Tambahkan juga fungsi hitung usia agar otomatis [cite: 101, 102]
