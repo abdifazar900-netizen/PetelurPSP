@@ -131,12 +131,13 @@
       payload.tgl_datang = document.getElementById('tgl_datang').value;
       payload.usia_skrg = document.getElementById('usia_skrg').value;
     }
-    else if(action === 'simpanMasalah') {
-      payload.tgl = document.getElementById('tgl_catatan').value;
-      payload.kandang = document.getElementById('kandang_masalah').value;
-      payload.masalah = document.getElementById('masalah_ayam').value;
-      payload.ket = document.getElementById('ket_masalah').value;
-    }
+   else if(action === 'simpanMasalah') {
+  payload.tgl = document.getElementById('tgl_catatan').value;
+  // PASTIKAN baris ini mengambil ID 'select_kandang' (dropdown)
+  payload.kandang = document.getElementById('select_kandang').value; 
+  payload.masalah = document.getElementById('masalah_ayam').value;
+  payload.ket = document.getElementById('ket_masalah').value;
+}
 
     fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
     .then(() => {
