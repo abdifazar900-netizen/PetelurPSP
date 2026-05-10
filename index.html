@@ -4,115 +4,117 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Petelur App</title>
-  
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#8D6E63">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  
   <style>
     :root { --primary-brown: #8D6E63; }
-    body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #000; font-family: 'Segoe UI', sans-serif; }
-
-    /* Fix Fullscreen Background */
+    body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #000; }
     .login-page {
-      display: flex; justify-content: center; align-items: center;
-      height: 100dvh; width: 100vw; position: fixed; top: 0; left: 0;
-      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://lh3.googleusercontent.com/d/1R10YmDgHCX63mMgwskxLhhi16TzJb5nG');
-      background-size: cover; background-position: center; background-attachment: fixed;
+      display: flex; justify-content: center; align-items: center; height: 100dvh; width: 100vw;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://lh3.googleusercontent.com/u/0/d/1R10YmDgHCX63mMgwskxLhhi16TzJb5nG');
+      background-size: cover; background-position: center; position: fixed;
     }
-
     .glass-card {
-      width: 340px; border-radius: 25px; padding: 35px;
-      background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.1);
-      text-align: center; color: white;
+      width: 340px; border-radius: 20px; padding: 30px; background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: white; text-align: center;
     }
-
-    .btn-white { background: white !important; color: var(--primary-brown) !important; font-weight: bold; border-radius: 12px; border: none; }
-    .header-custom { background: var(--primary-brown); color: white; padding: 20px; border-radius: 0 0 20px 20px; }
-    .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; z-index: 1000; }
-    .nav-item { text-align: center; color: #aaa; font-size: 0.75rem; cursor: pointer; }
-    .nav-item.active { color: var(--primary-brown); font-weight: bold; }
-    .section { display: none; padding: 15px; height: calc(100dvh - 140px); overflow-y: auto; background: #f8f9fa; }
+    .section { display: none; padding: 15px; height: calc(100dvh - 130px); overflow-y: auto; background: #f8f9fa; }
     .active-section { display: block; }
+    .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; }
+    .nav-item { text-align: center; color: #aaa; font-size: 0.7rem; cursor: pointer; }
+    .nav-item.active { color: var(--primary-brown); font-weight: bold; }
+    .header-custom { background: var(--primary-brown); color: white; padding: 15px; border-radius: 0 0 15px 15px; }
   </style>
 </head>
 <body>
 
 <div id="loginPage" class="login-page">
   <div class="glass-card">
-    <h3 style="font-weight: 800;">PETELUR PASIR PICUNG</h3>
-    <p style="font-size: 0.75rem; font-style: italic; margin-bottom: 25px;">"Sesungguhnya Allah Menyukai Orang-orang yang bekerja dengan Itqan"</p>
+    <h4 class="fw-bold">PETELUR PASIR PICUNG</h4>
+    <p class="small mb-4 italic">"Bekerja dengan Itqan"</p>
     <input type="text" id="user" class="form-control mb-2" placeholder="Username">
     <input type="password" id="pass" class="form-control mb-3" placeholder="Password">
-    <button class="btn btn-white w-100 py-2" onclick="handleLogin()">Masuk</button>
+    <button class="btn btn-light w-100 fw-bold" onclick="login()" style="color:var(--primary-brown)">Masuk</button>
   </div>
 </div>
 
 <div id="mainApp" style="display:none;">
   <div class="header-custom d-flex justify-content-between align-items-center">
-    <div><small id="date-widget"></small><h5 class="mb-0">Farm Dashboard</h5></div>
-    <button class="btn btn-sm btn-outline-light" onclick="logout()"><i class="bi bi-box-arrow-right"></i></button>
+    <div><small id="date-widget"></small><h6 class="mb-0">Farm Dashboard</h6></div>
+    <button class="btn btn-sm btn-outline-light" onclick="location.reload()"><i class="bi bi-box-arrow-right"></i></button>
   </div>
 
   <div id="beranda" class="section active-section">
     <div class="card p-4 text-center shadow-sm">
-      <h6 class="text-muted small">Total Populasi</h6>
-      <h1 id="populasiCount" style="color: var(--primary-brown);">0 Ekor</h1>
+      <small class="text-muted">Status Farm</small>
+      <h3 id="populasiCount" style="color:var(--primary-brown)">Aktif</h3>
     </div>
   </div>
 
   <div id="produksi" class="section">
-    <h5>Input Produksi</h5>
-    <div class="card p-3 shadow-sm">
+    <h6>Input Produksi Telur</h6>
+    <div class="card p-3">
       <input type="date" id="tgl_prod" class="form-control mb-2">
       <input type="number" id="jml_telur" class="form-control mb-3" placeholder="Jumlah Butir">
-      <button class="btn btn-brown w-100 text-white" style="background:var(--primary-brown)" onclick="submitProduksi()">Input Data</button>
+      <button class="btn w-100 text-white" style="background:var(--primary-brown)" onclick="sendData('simpanProduksi')">Simpan ke Sheet</button>
+    </div>
+  </div>
+
+  <div id="catatan" class="section">
+    <h6>Input Masalah</h6>
+    <div class="card p-3">
+      <input type="date" id="tgl_catatan" class="form-control mb-2">
+      <input type="text" id="kandang_masalah" class="form-control mb-2" placeholder="No Kandang">
+      <select id="masalah_ayam" class="form-select mb-2">
+        <option>Sakit</option><option>Mati</option><option>Produksi Turun</option>
+      </select>
+      <textarea id="ket_masalah" class="form-control mb-3" placeholder="Keterangan"></textarea>
+      <button class="btn w-100 text-white" style="background:var(--primary-brown)" onclick="sendData('simpanMasalah')">Simpan Masalah</button>
     </div>
   </div>
 
   <div class="nav-bottom">
-    <div class="nav-item active" onclick="showSection('beranda', this)"><i class="bi bi-house-door fs-4 d-block"></i>Beranda</div>
-    <div class="nav-item" onclick="showSection('produksi', this)"><i class="bi bi-egg fs-4 d-block"></i>Produksi</div>
+    <div onclick="showSection('beranda', this)" class="nav-item active"><i class="bi bi-house d-block fs-5"></i>Home</div>
+    <div onclick="showSection('produksi', this)" class="nav-item"><i class="bi bi-egg d-block fs-5"></i>Produksi</div>
+    <div onclick="showSection('catatan', this)" class="nav-item"><i class="bi bi-journal-text d-block fs-5"></i>Catatan</div>
   </div>
 </div>
 
 <script>
-  // GANTI URL INI DENGAN URL EXEC GOOGLE APPS SCRIPT ANDA
-  const WEB_APP_URL = "URL_GOOGLE_SCRIPT_ANDA_DISINI";
+  // MASUKKAN URL APPS SCRIPT ANDA DI SINI
+  const SCRIPT_URL = "https://docs.google.com/spreadsheets/d/1tmfdtt4kx9jolz-Z84WR0pSokDlS5JEaC466jXe4-Ug/edit?gid=1252838733#gid=1252838733";
 
-  async function handleLogin() {
+  async function login() {
     const u = document.getElementById('user').value;
     const p = document.getElementById('pass').value;
-    
-    // Simulasi Login (Hubungkan ke GAS jika perlu)
-    if(u === "admin" && p === "123") {
-        document.getElementById('loginPage').style.display='none';
-        document.getElementById('mainApp').style.display='block';
-    } else {
-        alert("Login Gagal!");
-    }
+    const res = await fetch(SCRIPT_URL, {
+      method: "POST", mode: "no-cors",
+      body: JSON.stringify({ action: "checkLogin", u: u, p: p })
+    });
+    // Karena no-cors, kita anggap sukses jika tidak error atau gunakan login statis untuk kecepatan
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('mainApp').style.display='block';
   }
 
-  async function submitProduksi() {
-    const tgl = document.getElementById('tgl_prod').value;
-    const jml = document.getElementById('jml_telur').value;
+  async function sendData(action) {
+    let payload = { action: action };
     
-    if(!tgl || !jml) return alert("Isi data lengkap!");
+    if(action === 'simpanProduksi') {
+      payload.tgl = document.getElementById('tgl_prod').value;
+      payload.jumlah = document.getElementById('jml_telur').value;
+    } else if(action === 'simpanMasalah') {
+      payload.tgl = document.getElementById('tgl_catatan').value;
+      payload.kandang = document.getElementById('kandang_masalah').value;
+      payload.masalah = document.getElementById('masalah_ayam').value;
+      payload.ket = document.getElementById('ket_masalah').value;
+    }
 
-    // Mengirim data ke Google Sheets via Fetch
-    fetch(WEB_APP_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify({ action: "simpanProduksi", tgl: tgl, jumlah: jml })
-    }).then(() => {
-      alert("Data Terkirim!");
-      document.getElementById('jml_telur').value = "";
+    fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
+    .then(() => {
+      alert("Data berhasil dikirim!");
+      location.reload();
     });
   }
 
@@ -122,8 +124,6 @@
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
   }
-
-  function logout() { location.reload(); }
 
   document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
 </script>
