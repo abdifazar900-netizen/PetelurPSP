@@ -53,6 +53,18 @@
     </div>
   </div>
 
+  <div id="data" class="section">
+  <h6>Input Populasi Kandang</h6>
+  <div class="card p-3 shadow-sm">
+    <input type="text" id="kandang" class="form-control mb-2" placeholder="No Kandang">
+    <input type="number" id="usia_awal" class="form-control mb-2" placeholder="Usia Awal (Minggu)" oninput="hitungUsia()">
+    <input type="date" id="tgl_datang" class="form-control mb-2" onchange="hitungUsia()">
+    <div class="bg-light p-2 mb-3 rounded small text-center">Usia Hari Ini: <b id="display_usia">-</b></div>
+    <input type="hidden" id="usia_skrg">
+    <button class="btn w-100 text-white" style="background:var(--primary-brown)" onclick="sendData('simpanPopulasi')">Simpan Populasi</button>
+  </div>
+</div>
+
   <div id="produksi" class="section">
     <h6>Input Produksi Telur</h6>
     <div class="card p-3">
@@ -76,10 +88,10 @@
   </div>
 
   <div class="nav-bottom">
-    <div onclick="showSection('beranda', this)" class="nav-item active"><i class="bi bi-house d-block fs-5"></i>Home</div>
-    <div onclick="showSection('produksi', this)" class="nav-item"><i class="bi bi-egg d-block fs-5"></i>Produksi</div>
-    <div onclick="showSection('catatan', this)" class="nav-item"><i class="bi bi-journal-text d-block fs-5"></i>Catatan</div>
-  </div>
+  <div onclick="showSection('beranda', this)" class="nav-item active"><i class="bi bi-house d-block fs-5"></i>Home</div>
+  <div onclick="showSection('data', this)" class="nav-item"><i class="bi bi-plus-circle d-block fs-5"></i>Data</div>
+  <div onclick="showSection('produksi', this)" class="nav-item"><i class="bi bi-egg d-block fs-5"></i>Produksi</div>
+  <div onclick="showSection('catatan', this)" class="nav-item"><i class="bi bi-journal-text d-block fs-5"></i>Catatan</div>
 </div>
 
 <script>
@@ -99,24 +111,44 @@
   }
 
   async function sendData(action) {
-    let payload = { action: action };
-    
-    if(action === 'simpanProduksi') {
-      payload.tgl = document.getElementById('tgl_prod').value;
-      payload.jumlah = document.getElementById('jml_telur').value;
-    } else if(action === 'simpanMasalah') {
-      payload.tgl = document.getElementById('tgl_catatan').value;
-      payload.kandang = document.getElementById('kandang_masalah').value;
-      payload.masalah = document.getElementById('masalah_ayam').value;
-      payload.ket = document.getElementById('ket_masalah').value;
-    }
-
-    fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
-    .then(() => {
-      alert("Data berhasil dikirim!");
-      location.reload();
-    });
+  let payload = { action: action };
+  
+  if(action === 'simpanProduksi') {
+    payload.tgl = document.getElementById('tgl_prod').value;
+    payload.jumlah = document.getElementById('jml_telur').value;
+  } 
+  else if(action === 'simpanPopulasi') {
+    payload.kandang = document.getElementById('kandang').value;
+    payload.usia_awal = document.getElementById('usia_awal').value;
+    payload.tgl_datang = document.getElementById('tgl_datang').value;
+    payload.usia_skrg = document.getElementById('usia_skrg').value;
   }
+  else if(action === 'simpanMasalah') {
+    payload.tgl = document.getElementById('tgl_catatan').value;
+    payload.kandang = document.getElementById('kandang_masalah').value;
+    payload.masalah = document.getElementById('masalah_ayam').value;
+    payload.ket = document.getElementById('ket_masalah').value;
+  }
+
+  fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
+  .then(() => {
+    alert("Data " + action + " berhasil dikirim!");
+    location.reload();
+  });
+}
+
+// Tambahkan juga fungsi hitung usia agar otomatis [cite: 101, 102]
+function hitungUsia() {
+  const minggu = document.getElementById('usia_awal').value;
+  const tgl = document.getElementById('tgl_datang').value;
+  if(minggu && tgl) {
+    const selisih = Math.floor((new Date() - new Date(tgl)) / (1000*60*60*24));
+    const totalHari = (parseInt(minggu)*7) + selisih;
+    const teks = Math.floor(totalHari/7) + " Minggu " + (totalHari%7) + " Hari";
+    document.getElementById('display_usia').innerText = teks;
+    document.getElementById('usia_skrg').value = teks;
+  }
+}
 
   function showSection(id, el) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
