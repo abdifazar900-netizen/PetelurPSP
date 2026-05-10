@@ -78,7 +78,9 @@
     <h6>Input Masalah</h6>
     <div class="card p-3">
       <input type="date" id="tgl_catatan" class="form-control mb-2">
-      <input type="text" id="kandang_masalah" class="form-control mb-2" placeholder="No Kandang">
+      <select id="select_kandang" class="form-select mb-2">
+  <option value="">-- Pilih No Kandang --</option>
+</select>
       <select id="masalah_ayam" class="form-select mb-2">
         <option>Sakit</option><option>Mati</option><option>Produksi Turun</option>
       </select>
@@ -174,7 +176,18 @@ function hitungUsia() {
     document.getElementById(id).classList.add('active-section');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     el.classList.add('active');
+    if(id === 'catatan') loadKandangList(); 
+  if(id === 'produksi') loadProduksi();
+  if(id === 'beranda') loadAllData();
   }
+  function loadKandangList() {
+  google.script.run.withSuccessHandler(list => {
+    let html = '<option value="">-- Pilih No Kandang --</option>';
+    // list adalah data yang diambil dari sheet Populasi
+    list.forEach(i => html += `<option value="${i.nomor}">${i.nomor}</option>`);
+    document.getElementById('select_kandang').innerHTML = html;
+  }).getDaftarKandang();
+}
 
   document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
 </script>
