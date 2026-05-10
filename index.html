@@ -181,12 +181,21 @@ function hitungUsia() {
   if(id === 'beranda') loadAllData();
   }
   function loadKandangList() {
-  google.script.run.withSuccessHandler(list => {
-    let html = '<option value="">-- Pilih No Kandang --</option>';
-    // list adalah data yang diambil dari sheet Populasi
-    list.forEach(i => html += `<option value="${i.nomor}">${i.nomor}</option>`);
-    document.getElementById('select_kandang').innerHTML = html;
-  }).getDaftarKandang();
+  // GANTI URL DI BAWAH DENGAN URL WEB APP (DEPLOYMENT) ANDA
+  const SCRIPT_URL = "URL_DEPLOYMENT_BARU_ANDA"; 
+
+  fetch(SCRIPT_URL + "?action=getListKandang")
+    .then(res => res.json())
+    .then(list => {
+      let html = '<option value="">-- Pilih No Kandang --</option>';
+      if (list && list.length > 0) {
+        list.forEach(i => {
+          html += `<option value="${i.nomor}">${i.nomor}</option>`;
+        });
+      }
+      document.getElementById('select_kandang').innerHTML = html;
+    })
+    .catch(err => console.error("Gagal mengambil data:", err));
 }
 
   document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
