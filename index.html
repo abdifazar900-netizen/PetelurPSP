@@ -181,21 +181,19 @@ function hitungUsia() {
   if(id === 'beranda') loadAllData();
   }
   function loadKandangList() {
-  // GANTI URL DI BAWAH DENGAN URL WEB APP (DEPLOYMENT) ANDA
+  // GANTI DENGAN URL WEB APP ANDA YANG BARU
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec"; 
 
   fetch(SCRIPT_URL + "?action=getListKandang")
-    .then(res => res.json())
+    .then(response => response.json())
     .then(list => {
       let html = '<option value="">-- Pilih No Kandang --</option>';
-      if (list && list.length > 0) {
-        list.forEach(i => {
-          html += `<option value="${i.nomor}">${i.nomor}</option>`;
-        });
-      }
+      list.forEach(i => {
+        html += `<option value="${i.nomor}">${i.nomor}</option>`;
+      });
       document.getElementById('select_kandang').innerHTML = html;
     })
-    .catch(err => console.error("Gagal mengambil data:", err));
+    .catch(err => console.error("Error ambil data:", err));
 }
 
   document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
