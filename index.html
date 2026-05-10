@@ -36,7 +36,7 @@
     <p class="small mb-4 italic">"Bekerja dengan Itqan"</p>
     <input type="text" id="user" class="form-control mb-2" placeholder="Username">
     <input type="password" id="pass" class="form-control mb-3" placeholder="Password">
-   <button class="btn btn-light w-100 fw-bold" onclick="masukApp()" style="color:var(--primary-brown)">Masuk</button>
+  <button class="btn btn-light w-100 fw-bold" onclick="login()" style="color:var(--primary-brown)">Masuk</button>
   </div>
 </div>
 
@@ -102,181 +102,81 @@
 </div>
 
 <script>
-  // MASUKKAN URL APPS SCRIPT ANDA DI SINI
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
 
-  function masukApp() {
-    // 1. Langsung paksa pindah halaman tanpa cek ke Google dulu (biar gak kena CORS)
+  // FUNGSI LOGIN
+  function login() {
+    // Sembunyikan login, tampilkan aplikasi
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('mainApp').style.display = 'block';
     
-    // 2. Tandai sudah login
+    // Simpan status login di browser agar tidak perlu login ulang saat refresh
     localStorage.setItem("isLoggedIn", "true");
     
-    // 3. Jalankan fungsi beranda
-    if (typeof showSection === "function") {
-        showSection('beranda');
-    }
-}
-    // Karena no-cors, kita anggap sukses jika tidak error atau gunakan login statis untuk kecepatan
-    document.getElementById('loginPage').style.display='none';
-    document.getElementById('mainApp').style.display='block';
-  }
-  window.onload = function() {
-  if(localStorage.getItem("isLoggedIn") === "true") {
-    document.getElementById('loginPage').style.display='none';
-    document.getElementById('mainApp').style.display='block';
-  }
-}
-
- async function sendData(action) {
-    let payload = { action: action };
-    
-    if(action === 'simpanProduksi') {
-      payload.tgl = document.getElementById('tgl_prod').value;
-      payload.jumlah = document.getElementById('jml_telur').value;
-    } 
-    else if(action === 'simpanPopulasi') {
-      payload.kandang = document.getElementById('kandang').value; // Sesuai backend
-      payload.usia_awal = document.getElementById('usia_awal').value;
-      payload.tgl_datang = document.getElementById('tgl_datang').value;
-      payload.usia_skrg = document.getElementById('usia_skrg').value;
-    }
-
-else if(action === 'simpanMasalah') {
-  payload.tgl = document.getElementById('tgl_catatan').value;
-  // PASTIKAN baris ini mengambil ID 'select_kandang' (dropdown)
-  payload.kandang = document.getElementById('select_kandang').value; 
-  payload.masalah = document.getElementById('masalah_ayam').value;
-  payload.ket = document.getElementById('ket_masalah').value;
-}
-
-// ... kode fetch di bawahnya ...
-
-    fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
-.then(() => {
-  alert("Data " + action + " berhasil dikirim!");
-  
-  // TAMBAHKAN KODE INI UNTUK MEMBERSIHKAN TAMPILAN
-  if (action === 'simpanMasalah') {
-    document.getElementById('tgl_catatan').value = "";
-    document.getElementById('select_kandang').value = ""; // Membersihkan dropdown No Kandang
-    document.getElementById('ket_masalah').value = "";    // Membersihkan Keterangan
-  }
-  
-  if (action === 'simpanPopulasi') {
-    document.getElementById('kandang').value = "";
-    document.getElementById('usia_awal').value = "";
-    document.getElementById('tgl_datang').value = "";
-  }
-  
-  if (action === 'simpanProduksi') {
-    document.getElementById('jml_telur').value = "";
-  }
-});
+    // Tampilkan data beranda
+    showSection('beranda');
   }
 
-// Tambahkan juga fungsi hitung usia agar otomatis [cite: 101, 102]
-function hitungUsia() {
-  const minggu = document.getElementById('usia_awal').value;
-  const tgl = document.getElementById('tgl_datang').value;
-  if(minggu && tgl) {
-    const selisih = Math.floor((new Date() - new Date(tgl)) / (1000*60*60*24));
-    const totalHari = (parseInt(minggu)*7) + selisih;
-    const teks = Math.floor(totalHari/7) + " Minggu " + (totalHari%7) + " Hari";
-    document.getElementById('display_usia').innerText = teks;
-    document.getElementById('usia_skrg').value = teks;
-  }
-}
-
+  // FUNGSI PINDAH HALAMAN & AMBIL DATA
   function showSection(id, el) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-    document.getElementById(id).classList.add('active-section');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    el.classList.add('active');
-    if(id === 'catatan') loadKandangList(); 
-  if(id === 'produksi') loadProduksi();
- if(id === 'beranda') loadTotalPopulasi();
-  }
-  function loadKandangList() {
-  // GANTI DENGAN URL WEB APP ANDA YANG BARU
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec"; 
+    const target = document.getElementById(id);
+    if(target) target.classList.add('active-section');
 
-  fetch(SCRIPT_URL + "?action=getListKandang")
-    .then(response => response.json())
-    .then(list => {
-      let html = '<option value="">-- Pilih No Kandang --</option>';
-      list.forEach(i => {
-        html += `<option value="${i.nomor}">${i.nomor}</option>`;
-      });
-      document.getElementById('select_kandang').innerHTML = html;
-    })
-    .catch(err => console.error("Error ambil data:", err));
-}
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if(el) el.classList.add('active');
+
+    // Panggil data otomatis sesuai halaman
+    if(id === 'beranda') {
+      loadTotalPopulasi();
+      loadFollowUp();
+    }
+    if(id === 'catatan') loadKandangList();
+  }
+
   function loadTotalPopulasi() {
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec"; // Gunakan URL deployment terbaru
-  
-  fetch(SCRIPT_URL + "?action=getTotalPopulasi")
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('count_populasi').innerText = data.total;
-    })
-    .catch(err => console.error("Gagal memuat total populasi:", err));
-}
-function loadFollowUp() {
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
-  const finalUrl = SCRIPT_URL + "?action=getMasalahAktif&t=" + new Date().getTime();
-  fetch(SCRIPT_URL + "?action=getMasalahAktif")
-.then(res => {
-  if (!res.ok) throw new Error('Network response was not ok');
-  return res.json();
-})
-.then(data => {
-      let html = "";
-      if (data.length === 0) {
-        html = '<div class="alert alert-success text-center">Semua ayam sehat!</div>';
-      } else {
-        data.forEach(item => {
-          html += `
-            <div class="card p-3 mb-2 border-start border-danger border-4">
+    fetch(SCRIPT_URL + "?action=getTotalPopulasi")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('count_populasi').innerText = data.total || 0;
+      })
+      .catch(err => console.error("Gagal muat populasi:", err));
+  }
+
+  function loadFollowUp() {
+    const listDiv = document.getElementById('list_follow_up');
+    fetch(SCRIPT_URL + "?action=getMasalahAktif")
+      .then(res => res.json())
+      .then(data => {
+        let html = "";
+        if (!data || data.length === 0) {
+          html = '<div class="alert alert-success text-center">Semua ayam sehat!</div>';
+        } else {
+          data.forEach(item => {
+            html += `<div class="card p-3 mb-2 border-start border-danger border-4">
               <div class="d-flex justify-content-between align-items-center">
                 <div>
                   <h6 class="mb-0 fw-bold">Kandang: ${item.kandang}</h6>
-                  <small class="text-danger">${item.masalah}</small><br>
-                  <small class="text-muted">${item.ket}</small>
+                  <small class="text-danger">${item.masalah}</small>
                 </div>
-                <button class="btn btn-sm btn-success" onclick="markSolved(${item.row})">Selesai</button>
               </div>
             </div>`;
-        });
-      }
-      document.getElementById('list_follow_up').innerHTML = html;
-    });
-}
+          });
+        }
+        listDiv.innerHTML = html;
+      });
+  }
 
-// ... kode fungsi loadTotalPopulasi & loadFollowUp di atas ...
-
-function showSection(sectionId, el) {
-  // Sembunyikan semua section
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-  // Tampilkan section yang dipilih
-  document.getElementById(sectionId).classList.add('active-section');
-  
-  // Update tampilan menu bawah (navbar)
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  if(el) el.classList.add('active');
-
- if(sectionId === 'beranda') {
-  loadTotalPopulasi();
-  loadFollowUp();
-}
-
-// Inisialisasi saat pertama kali web dibuka
-window.onload = function() {
-  showSection('beranda'); 
-};
-
-  document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
+  // AUTO LOGIN SAAT REFRESH
+  window.onload = function() {
+    document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
+    
+    if(localStorage.getItem("isLoggedIn") === "true") {
+      document.getElementById('loginPage').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      showSection('beranda');
+    }
+  };
 </script>
 </body>
 </html>
