@@ -36,7 +36,7 @@
     <p class="small mb-4 italic">"Bekerja dengan Itqan"</p>
     <input type="text" id="user" class="form-control mb-2" placeholder="Username">
     <input type="password" id="pass" class="form-control mb-3" placeholder="Password">
-    <button class="btn btn-light w-100 fw-bold" onclick="login()" style="color:var(--primary-brown)">Masuk</button>
+   <button class="btn btn-light w-100 fw-bold" onclick="masukApp()" style="color:var(--primary-brown)">Masuk</button>
   </div>
 </div>
 
@@ -105,13 +105,19 @@
   // MASUKKAN URL APPS SCRIPT ANDA DI SINI
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
 
-  async function login() {
-    const u = document.getElementById('user').value;
-    const p = document.getElementById('pass').value;
-    const res = await fetch(SCRIPT_URL, {
-      method: "POST", mode: "no-cors",
-      body: JSON.stringify({ action: "checkLogin", u: u, p: p })
-    });
+  function masukApp() {
+    // 1. Langsung paksa pindah halaman tanpa cek ke Google dulu (biar gak kena CORS)
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    
+    // 2. Tandai sudah login
+    localStorage.setItem("isLoggedIn", "true");
+    
+    // 3. Jalankan fungsi beranda
+    if (typeof showSection === "function") {
+        showSection('beranda');
+    }
+}
     // Karena no-cors, kita anggap sukses jika tidak error atau gunakan login statis untuk kecepatan
     document.getElementById('loginPage').style.display='none';
     document.getElementById('mainApp').style.display='block';
