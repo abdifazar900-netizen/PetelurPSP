@@ -46,12 +46,13 @@
     <button class="btn btn-sm btn-outline-light" onclick="location.reload()"><i class="bi bi-box-arrow-right"></i></button>
   </div>
 
-  <div id="beranda" class="section active-section">
-    <div class="card p-4 text-center shadow-sm">
-      <small class="text-muted">Status Farm</small>
-      <h3 id="populasiCount" style="color:var(--primary-brown)">Aktif</h3>
-    </div>
+ <div id="beranda" class="section active-section">
+  <div class="card p-4 text-center">
+    <h6 class="text-muted">Total Populasi Ayam</h6>
+    <h1 id="count_populasi" class="display-4 fw-bold text-brown">0</h1>
+    <p class="mb-0">Ekor</p>
   </div>
+</div>
 
   <div id="data" class="section">
   <h6>Input Populasi Kandang</h6>
@@ -185,7 +186,7 @@ function hitungUsia() {
     el.classList.add('active');
     if(id === 'catatan') loadKandangList(); 
   if(id === 'produksi') loadProduksi();
-  if(id === 'beranda') loadAllData();
+ if(id === 'beranda') loadTotalPopulasi();
   }
   function loadKandangList() {
   // GANTI DENGAN URL WEB APP ANDA YANG BARU
@@ -202,6 +203,19 @@ function hitungUsia() {
     })
     .catch(err => console.error("Error ambil data:", err));
 }
+  function loadTotalPopulasi() {
+  const SCRIPT_URL = "URL_WEB_APP_ANDA"; // Gunakan URL deployment terbaru
+  
+  fetch(SCRIPT_URL + "?action=getTotalPopulasi")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('count_populasi').innerText = data.total;
+    })
+    .catch(err => console.error("Gagal memuat total populasi:", err));
+}
+
+// Pastikan fungsi ini dipanggil saat halaman pertama kali dibuka
+window.onload = loadTotalPopulasi;
 
   document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
 </script>
