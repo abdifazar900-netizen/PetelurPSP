@@ -109,33 +109,52 @@
     document.getElementById('loginPage').style.display='none';
     document.getElementById('mainApp').style.display='block';
   }
-
-  async function sendData(action) {
-  let payload = { action: action };
-  
-  if(action === 'simpanProduksi') {
-    payload.tgl = document.getElementById('tgl_prod').value;
-    payload.jumlah = document.getElementById('jml_telur').value;
-  } 
-  else if(action === 'simpanPopulasi') {
-    payload.kandang = document.getElementById('kandang').value;
-    payload.usia_awal = document.getElementById('usia_awal').value;
-    payload.tgl_datang = document.getElementById('tgl_datang').value;
-    payload.usia_skrg = document.getElementById('usia_skrg').value;
+  window.onload = function() {
+  if(localStorage.getItem("isLoggedIn") === "true") {
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('mainApp').style.display='block';
   }
-  else if(action === 'simpanMasalah') {
-    payload.tgl = document.getElementById('tgl_catatan').value;
-    payload.kandang = document.getElementById('kandang_masalah').value;
-    payload.masalah = document.getElementById('masalah_ayam').value;
-    payload.ket = document.getElementById('ket_masalah').value;
-  }
-
-  fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
-  .then(() => {
-    alert("Data " + action + " berhasil dikirim!");
-    location.reload();
-  });
 }
+
+ async function sendData(action) {
+    let payload = { action: action };
+    
+    if(action === 'simpanProduksi') {
+      payload.tgl = document.getElementById('tgl_prod').value;
+      payload.jumlah = document.getElementById('jml_telur').value;
+    } 
+    else if(action === 'simpanPopulasi') {
+      payload.kand = document.getElementById('kandang').value; // Sesuai backend
+      payload.usia_awal = document.getElementById('usia_awal').value;
+      payload.tgl_datang = document.getElementById('tgl_datang').value;
+      payload.usia_skrg = document.getElementById('usia_skrg').value;
+    }
+    else if(action === 'simpanMasalah') {
+      payload.tgl = document.getElementById('tgl_catatan').value;
+      payload.kandang = document.getElementById('kandang_masalah').value;
+      payload.masalah = document.getElementById('masalah_ayam').value;
+      payload.ket = document.getElementById('ket_masalah').value;
+    }
+
+    fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) })
+    .then(() => {
+      alert("Data " + action + " berhasil dikirim!");
+      
+      // PERBAIKAN: Jangan pakai location.reload() agar tidak logout.
+      // Cukup kosongkan input yang baru saja diisi.
+      if(action === 'simpanPopulasi') {
+        document.getElementById('kandang').value = "";
+        document.getElementById('usia_awal').value = "";
+        document.getElementById('tgl_datang').value = "";
+        document.getElementById('display_usia').innerText = "-";
+      } else if(action === 'simpanProduksi') {
+        document.getElementById('jml_telur').value = "";
+      } else if(action === 'simpanMasalah') {
+        document.getElementById('kandang_masalah').value = "";
+        document.getElementById('ket_masalah').value = "";
+      }
+    });
+  }
 
 // Tambahkan juga fungsi hitung usia agar otomatis [cite: 101, 102]
 function hitungUsia() {
