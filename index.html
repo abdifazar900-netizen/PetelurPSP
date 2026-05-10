@@ -135,14 +135,14 @@
   }
 
   function loadTotalPopulasi() {
-    fetch(SCRIPT_URL + "?action=getTotalPopulasi")
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById('count_populasi').innerText = data.total || 0;
-      })
-      .catch(err => console.error("Gagal muat populasi:", err));
-  }
-
+  fetch(SCRIPT_URL + "?action=getTotalPopulasi")
+    .then(res => res.json())
+    .then(data => {
+      // Mengisi angka ke elemen di Dashboard Home
+      document.getElementById('count_populasi').innerText = data.total;
+    })
+    .catch(err => console.error("Gagal muat populasi:", err));
+}
   function loadFollowUp() {
     const listDiv = document.getElementById('list_follow_up');
     fetch(SCRIPT_URL + "?action=getMasalahAktif")
