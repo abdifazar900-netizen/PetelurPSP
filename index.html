@@ -204,7 +204,7 @@ function hitungUsia() {
     .catch(err => console.error("Error ambil data:", err));
 }
   function loadTotalPopulasi() {
-  const SCRIPT_URL = "URL_WEB_APP_ANDA"; // Gunakan URL deployment terbaru
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec"; // Gunakan URL deployment terbaru
   
   fetch(SCRIPT_URL + "?action=getTotalPopulasi")
     .then(res => res.json())
