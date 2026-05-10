@@ -221,8 +221,11 @@ function loadFollowUp() {
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
   
   fetch(SCRIPT_URL + "?action=getMasalahAktif")
-    .then(res => res.json())
-    .then(data => {
+.then(res => {
+  if (!res.ok) throw new Error('Network response was not ok');
+  return res.json();
+})
+.then(data => {
       let html = "";
       if (data.length === 0) {
         html = '<div class="alert alert-success text-center">Semua ayam sehat!</div>';
