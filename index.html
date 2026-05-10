@@ -52,6 +52,10 @@
     <h1 id="count_populasi" class="display-4 fw-bold text-brown">0</h1>
     <p class="mb-0">Ekor</p>
   </div>
+<h6 class="fw-bold mb-3">Daftar Follow Up Masalah</h6>
+  <div id="list_follow_up">
+    <p class="text-muted text-center">Memuat data masalah...</p>
+  </div>
 </div>
 
   <div id="data" class="section">
@@ -213,7 +217,53 @@ function hitungUsia() {
     })
     .catch(err => console.error("Gagal memuat total populasi:", err));
 }
+function loadFollowUp() {
+  const SCRIPT_URL = "URL_WEB_APP_ANDA";
+  
+  fetch(SCRIPT_URL + "?action=getMasalahAktif")
+    .then(res => res.json())
+    .then(data => {
+      let html = "";
+      if (data.length === 0) {
+        html = '<div class="alert alert-success text-center">Semua ayam sehat!</div>';
+      } else {
+        data.forEach(item => {
+          html += `
+            <div class="card p-3 mb-2 border-start border-danger border-4">
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <h6 class="mb-0 fw-bold">Kandang: ${item.kandang}</h6>
+                  <small class="text-danger">${item.masalah}</small><br>
+                  <small class="text-muted">${item.ket}</small>
+                </div>
+                <button class="btn btn-sm btn-success" onclick="markSolved(${item.row})">Selesai</button>
+              </div>
+            </div>`;
+        });
+      }
+      document.getElementById('list_follow_up').innerHTML = html;
+    });
+}
 
+function markSolved(row) {
+  if(!confirm("Yakin masalah ini sudah selesai?")) return;
+  
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    body: JSON.stringify({ action: "markSolved", row: row })
+  }).then(() => {
+    alert("Berhasil diperbarui!");
+    loadFollowUp(); // Refresh list
+  });
+}
+
+// Panggil fungsi saat menu Home dibuka
+// Di dalam showSection(id, el), tambahkan:
+if(id === 'beranda') {
+  loadTotalPopulasi();
+  loadFollowUp();
+}
 // Pastikan fungsi ini dipanggil saat halaman pertama kali dibuka
 window.onload = loadTotalPopulasi;
 
