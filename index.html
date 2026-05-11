@@ -214,11 +214,20 @@ function sendData(action) {
           // Tambahkan ini di dalam function sendData(action)
 else if (action === 'simpanMasalah') {
   const tgl = document.getElementById('tgl_masalah').value;
-  const knd = document.getElementById('kandang_masalah').value;
+  const knd = document.getElementById('kandang_masalah').value; // Input teks baru
   const msl = document.getElementById('masalah').value;
   const ket = document.getElementById('ket_masalah').value;
   
+  // Kirim parameter dengan nama yang sesuai untuk Code.gs
   url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&masalah=${msl}&ket_masalah=${ket}`;
+}
+
+// --- BAGIAN PEMBERSIHAN FORM DI DALAM .then ---
+if (action === 'simpanMasalah') {
+  document.getElementById('tgl_masalah').value = "";
+  document.getElementById('kandang_masalah').value = "";
+  document.getElementById('masalah').value = "";
+  document.getElementById('ket_masalah').value = "";
 }
         else {
          if(document.getElementById('jml_telur')) {
