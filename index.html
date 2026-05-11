@@ -181,34 +181,49 @@ function hitungUsia() {
 
 // FUNGSI KIRIM DATA
 function sendData(action) {
-  if(action === 'simpanPopulasi') {
+  if (action === 'simpanPopulasi') {
     const knd = document.getElementById('kandang').value;
     const u_awal = document.getElementById('usia_awal').value;
     const tgl = document.getElementById('tgl_datang').value;
     const u_skrg = document.getElementById('usia_skrg').value;
 
-    // Kirim dengan parameter yang sesuai dengan doGet
+    // Pastikan SCRIPT_URL sudah benar di bagian atas
     const url = `${SCRIPT_URL}?action=${action}&kandang=${knd}&usia_awal=${u_awal}&tgl_datang=${tgl}&usia_skrg=${u_skrg}`;
     
     fetch(url)
       .then(res => res.json())
       .then(result => {
-        .then(result => {
-  if (result.status === "success") {
-    alert("Data Berhasil Disimpan!");
-          location.reload(); // Refresh untuk update dashboard
+        if (result.status === "success") {
+          alert("Data Berhasil Disimpan!");
+          
+          // MEMBERSIHKAN FORM
+          document.getElementById('kandang').value = "";
+          document.getElementById('usia_awal').value = "";
+          document.getElementById('tgl_datang').value = "";
+          document.getElementById('display_usia').innerText = "-";
+          
+          // LANGSUNG PINDAH KE BERANDA (Solusi agar tidak reload ke login)
+          showSection('beranda'); 
         }
       })
       .catch(err => alert("Gagal simpan: " + err));
   }
 }
-
   // AUTO LOGIN SAAT REFRESH
- document.getElementById('kandang').value = "";
-    document.getElementById('usia_awal').value = "";
-    document.getElementById('tgl_datang').value = "";
-    document.getElementById('display_usia').innerText = "-";
-    }
+window.onload = function() {
+  // Menampilkan tanggal hari ini
+  if(document.getElementById('date-widget')) {
+    document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {
+      weekday: 'long', day: 'numeric', month: 'long'
+    });
+  }
+
+  // LOGIKA AUTO LOGIN (Sangat Penting!)
+  if (localStorage.getItem("isLoggedIn") === "true") {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('mainApp').style.display = 'block';
+    showSection('beranda'); // Langsung muat data dashboard
+  }
   };
 </script>
 </body>
