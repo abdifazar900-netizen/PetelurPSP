@@ -212,29 +212,34 @@ function sendData(action) {
           document.getElementById('display_usia').innerText = "-";
         }
           // Tambahkan ini di dalam function sendData(action)
-if (action === 'simpanMasalah') {
+function sendData(action) {
+  let url = `${SCRIPT_URL}?action=${action}`;
+
+  // --- BAGIAN AMBIL DATA (Harus sebelum fetch) ---
+  if (action === 'simpanMasalah') {
     const tgl = document.getElementById('tgl_masalah').value;
     const knd = document.getElementById('kandang_masalah').value;
     const msl = document.getElementById('masalah').value;
     const ket = document.getElementById('ket_masalah').value;
     
-    // Ini yang membuat data terisi di GSheet (harus cocok dengan Code.gs)
+    // Sinkronkan label parameter dengan Code.gs
     url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
   }
 
-// --- BAGIAN PEMBERSIHAN FORM DI DALAM .then ---
-if (action === 'simpanMasalah') {
-  document.getElementById('tgl_masalah').value = "";
-  document.getElementById('kandang_masalah').value = "";
-  document.getElementById('masalah').value = "";
-  document.getElementById('ket_masalah').value = "";
-}
-        else {
-         if(document.getElementById('jml_telur')) {
-    document.getElementById('jml_telur').value = "";
+  // Kirim data ke Google Apps Script
+  fetch(url)
+    .then(res => res.json())
+    .then(result => {
+      if (result.status === "success") {
+        alert("Data Berhasil Disimpan!");
+
+        // --- BAGIAN MEMBERSIHKAN FORM ---
+        if (action === 'simpanMasalah') {
+          document.getElementById('tgl_masalah').value = "";
+          document.getElementById('kandang_masalah').value = "";
+          document.getElementById('masalah').value = "";
+          document.getElementById('ket_masalah').value = "";
         }
-        }
-        // Kembali ke Beranda agar angka populasi/produksi terupdate
         showSection('beranda');
       }
     })
