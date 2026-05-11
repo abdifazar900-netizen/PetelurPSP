@@ -211,11 +211,7 @@ function sendData(action) {
           document.getElementById('tgl_datang').value = "";
           document.getElementById('display_usia').innerText = "-";
         }
-          // Tambahkan ini di dalam function sendData(action)
-function sendData(action) {
-  let url = `${SCRIPT_URL}?action=${action}`;
-
-  // --- BAGIAN AMBIL DATA (Harus sebelum fetch) ---
+   
   if (action === 'simpanMasalah') {
     const tgl = document.getElementById('tgl_masalah').value;
     const knd = document.getElementById('kandang_masalah').value;
@@ -244,7 +240,6 @@ function sendData(action) {
       }
     })
     .catch(err => alert("Gagal simpan: " + err));
-}
       }
   // AUTO LOGIN SAAT REFRESH
 window.onload = function() {
