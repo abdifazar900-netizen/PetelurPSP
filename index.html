@@ -1,266 +1,277 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Petelur App</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#8D6E63">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-  <style>
-    :root { --primary-brown: #8D6E63; }
-    body, html { margin: 0; padding: 0; height: 100%; width: 100%; overflow: hidden; background-color: #000; }
-    .login-page {
-      display: flex; justify-content: center; align-items: center; height: 100dvh; width: 100vw;
-      background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://lh3.googleusercontent.com/u/0/d/1R10YmDgHCX63mMgwskxLhhi16TzJb5nG');
-      background-size: cover; background-position: center; position: fixed;
-    }
-    .glass-card {
-      width: 340px; border-radius: 20px; padding: 30px; background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: white; text-align: center;
-    }
-    .section { display: none; padding: 15px; height: calc(100dvh - 130px); overflow-y: auto; background: #f8f9fa; }
-    .active-section { display: block; }
-    .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; }
-    .nav-item { text-align: center; color: #aaa; font-size: 0.7rem; cursor: pointer; }
-    .nav-item.active { color: var(--primary-brown); font-weight: bold; }
-    .header-custom { background: var(--primary-brown); color: white; padding: 15px; border-radius: 0 0 15px 15px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Petelur App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #8d6e63; --secondary: #5d4037; --bg: #f4f1ea; --text: #3e2723; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: var(--bg); color: var(--text); padding-bottom: 70px; }
+        .header { background: var(--primary); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .card { background: white; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); text-align: center; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 8px; font-size: 16px; cursor: pointer; width: 100%; font-weight: bold; transition: background 0.3s; }
+        button:active { background: var(--secondary); transform: scale(0.98); }
+        .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #eee; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
+        .nav-item { border: none; background: none; color: #999; display: flex; flex-direction: column; align-items: center; font-size: 10px; cursor: pointer; flex: 1; }
+        .nav-item i { font-size: 20px; margin-bottom: 4px; }
+        .nav-item.active { color: var(--primary); }
+        .section { display: none; }
+        .section.active { display: block; }
+        #loginPage { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; }
+        .login-box { background: #333; padding: 30px; border-radius: 20px; width: 85%; max-width: 350px; text-align: center; color: white; }
+        .follow-up-card { background: white; border: 2px solid #d32f2f; border-radius: 8px; padding: 10px; margin-bottom: 10px; text-align: left; }
+        .follow-up-card h4 { margin: 0; color: #d32f2f; font-size: 14px; }
+    </style>
 </head>
 <body>
 
-<div id="loginPage" class="login-page">
-  <div class="glass-card">
-    <h4 class="fw-bold">PETELUR PASIR PICUNG</h4>
-    <p class="small mb-4 italic">"Bekerja dengan Itqan"</p>
-    <input type="text" id="user" class="form-control mb-2" placeholder="Username">
-    <input type="password" id="pass" class="form-control mb-3" placeholder="Password">
-  <button class="btn btn-light w-100 fw-bold" onclick="login()" style="color:var(--primary-brown)">Masuk</button>
-  </div>
-</div>
-
-<div id="mainApp" style="display:none;">
-  <div class="header-custom d-flex justify-content-between align-items-center">
-    <div><small id="date-widget"></small><h6 class="mb-0">Farm Dashboard</h6></div>
-    <button class="btn btn-sm btn-outline-light" onclick="location.reload()"><i class="bi bi-box-arrow-right"></i></button>
-  </div>
-
- <div id="beranda" class="section active-section">
-  <div class="card p-4 text-center">
-    <h6 class="text-muted">Total Populasi Ayam</h6>
-    <h1 id="count_populasi" class="display-4 fw-bold text-brown">0</h1>
-    <p class="mb-0">Ekor</p>
-  </div>
-<h6 class="fw-bold mb-3">Daftar Follow Up Masalah</h6>
-  <div id="list_follow_up">
-    <p class="text-muted text-center">Memuat data masalah...</p>
-  </div>
-</div>
-
-  <div id="data" class="section">
-  <h6>Input Populasi Kandang</h6>
-  <div class="card p-3 shadow-sm">
-    <input type="text" id="kandang" class="form-control mb-2" placeholder="No Kandang">
-    <input type="number" id="usia_awal" class="form-control mb-2" placeholder="Usia Awal (Minggu)" oninput="hitungUsia()">
-    <input type="date" id="tgl_datang" class="form-control mb-2" onchange="hitungUsia()">
-    <div class="bg-light p-2 mb-3 rounded small text-center">Usia Hari Ini: <b id="display_usia">-</b></div>
-    <input type="hidden" id="usia_skrg">
-    <button class="btn w-100 text-white" style="background:var(--primary-brown)" onclick="sendData('simpanPopulasi')">Simpan Populasi</button>
-  </div>
-</div>
-
-  <div id="produksi" class="section">
-    <h6>Input Produksi Telur</h6>
-    <div class="card p-3">
-      <input type="date" id="tgl_prod" class="form-control mb-2">
-      <input type="number" id="jml_telur" class="form-control mb-3" placeholder="Jumlah Butir">
-      <button class="btn w-100 text-white" style="background:var(--primary-brown)" onclick="sendData('simpanProduksi')">Simpan ke Sheet</button>
-    </div>
-  </div>
-
-<div id="catatan" class="section">
-    <h6>Input Masalah / Catatan Kandang</h6>
-    <div class="card p-3 shadow-sm">
-      <input type="date" id="tgl_masalah" class="form-control mb-2">
-      
-      <input type="text" id="kandang_masalah" class="form-control mb-2" placeholder="Masukkan No Kandang (Contoh: K01)">
-      
-      <input type="text" id="masalah" class="form-control mb-2" placeholder="Jenis Masalah (Contoh: Ayam Lemas)">
-      <textarea id="ket_masalah" class="form-control mb-3" placeholder="Keterangan Tambahan"></textarea>
-      
-      <button class="btn w-100 text-white" style="background:var(--primary-brown)" onclick="sendData('simpanMasalah')">Simpan Masalah</button>
+<div id="loginPage">
+    <div class="login-box">
+        <h2 style="margin-bottom: 5px;">PETELUR PASIR PICUNG</h2>
+        <p style="font-size: 0.8em; font-style: italic; color: #ccc;">"Bekerja dengan Itqan"</p>
+        <div style="margin-top: 20px;">
+            <input type="text" id="username" placeholder="Username" style="background: #e8f0fe; margin-bottom: 15px;">
+            <input type="password" id="password" placeholder="Password" style="background: #e8f0fe; margin-bottom: 15px;">
+            <button onclick="login()" style="background: #d7ccc8; color: #3e2723;">Masuk</button>
+        </div>
     </div>
 </div>
 
-  <div class="nav-bottom">
-  <div onclick="showSection('beranda', this)" class="nav-item active"><i class="bi bi-house d-block fs-5"></i>Home</div>
-  <div onclick="showSection('data', this)" class="nav-item"><i class="bi bi-plus-circle d-block fs-5"></i>Data</div>
-  <div onclick="showSection('produksi', this)" class="nav-item"><i class="bi bi-egg d-block fs-5"></i>Produksi</div>
-  <div onclick="showSection('catatan', this)" class="nav-item"><i class="bi bi-journal-text d-block fs-5"></i>Catatan</div>
+<div id="mainApp" style="display: none;">
+    <div class="header">
+        <div>
+            <div id="date-widget" style="font-size: 0.8em; opacity: 0.8;"></div>
+            <div style="font-weight: bold;">Farm Dashboard</div>
+        </div>
+        <button onclick="logout()" style="width: auto; background: none; padding: 5px;"><i class="fas fa-sign-out-alt"></i></button>
+    </div>
+
+    <div class="container">
+        <div id="beranda" class="section active">
+            <div class="card">
+                <p style="margin: 0; font-size: 0.9em; opacity: 0.7;">Total Populasi Ayam</p>
+                <h1 id="total-populasi" style="margin: 5px 0; font-size: 3em;">-</h1>
+                <p style="margin: 0;">Ekor</p>
+            </div>
+            <h3>Daftar Follow Up Masalah</h3>
+            <div id="list-masalah">Memuat data...</div>
+        </div>
+
+        <div id="data" class="section">
+            <h3>Input Populasi Baru</h3>
+            <div class="card">
+                <div class="form-group">
+                    <label>No Kandang</label>
+                    <input type="text" id="kandang" placeholder="Contoh: A1">
+                </div>
+                <div class="form-group">
+                    <label>Usia Awal (Minggu)</label>
+                    <input type="number" id="usia_awal" placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Tanggal Datang Ayam</label>
+                    <input type="date" id="tgl_datang" onchange="hitungUsia()">
+                </div>
+                <div class="card" style="background: #efebe9; margin-top: 10px;">
+                    <p style="margin: 0; font-size: 0.8em;">Usia Ayam Saat Ini</p>
+                    <h2 id="display_usia" style="margin: 5px 0;">-</h2>
+                    <input type="hidden" id="usia_skrg">
+                </div>
+                <button onclick="sendData('simpanPopulasi')">Simpan Populasi</button>
+            </div>
+        </div>
+
+        <div id="produksi" class="section">
+            <h3>Input Produksi Harian</h3>
+            <div class="card">
+                <div class="form-group">
+                    <label>Tanggal Produksi</label>
+                    <input type="date" id="tgl_prod">
+                </div>
+                <div class="form-group">
+                    <label>Jumlah Telur (Butir)</label>
+                    <input type="number" id="jml_telur" placeholder="0">
+                </div>
+                <button onclick="sendData('simpanProduksi')">Simpan Produksi</button>
+            </div>
+        </div>
+
+        <div id="catatan" class="section">
+            <h3>Input Masalah</h3>
+            <div class="card">
+                <div class="form-group">
+                    <label>Tanggal Masalah</label>
+                    <input type="date" id="tgl_masalah">
+                </div>
+                <div class="form-group">
+                    <label>Pilih No Kandang</label>
+                    <select id="kandang_masalah">
+                        <option value="">-- Pilih No Kandang --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Detail Ayam</label>
+                    <select id="masalah">
+                        <option value="">-- Pilih Kondisi --</option>
+                        <option value="Sakit">Sakit</option>
+                        <option value="Mati">Mati</option>
+                        <option value="Afkir">Afkir</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Keterangan Masalah</label>
+                    <textarea id="ket_masalah" placeholder="Keterangan..." rows="3"></textarea>
+                </div>
+                <button onclick="sendData('simpanMasalah')">Simpan Masalah</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-bottom">
+        <button class="nav-item active" onclick="showSection('beranda')"><i class="fas fa-home"></i>Home</button>
+        <button class="nav-item" onclick="showSection('data')"><i class="fas fa-plus-circle"></i>Data</button>
+        <button class="nav-item" onclick="showSection('produksi')"><i class="fas fa-egg"></i>Produksi</button>
+        <button class="nav-item" onclick="showSection('catatan')"><i class="fas fa-notes-medical"></i>Catatan</button>
+    </div>
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxziXs6x7kf4NdGubdKCS_sClVjRkE-p2dfgqy4PR43r2cxGNRmTIfV0WBDOkGcF3FapQ/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqZ-w_0_pY2A1f6vL0n0qU0fA_m3_aI0vW8_8_8_8/exec"; // GANTI DENGAN URL WEB APP ANDA
 
-  // FUNGSI LOGIN
-  function login() {
-    // Sembunyikan login, tampilkan aplikasi
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-    
-    // Simpan status login di browser agar tidak perlu login ulang saat refresh
-    localStorage.setItem("isLoggedIn", "true");
-    
-    // Tampilkan data beranda
-    showSection('beranda');
-  }
-
-  // FUNGSI PINDAH HALAMAN & AMBIL DATA
-  function showSection(id, el) {
-    document.querySelectorAll('.section').forEach(s => s.classList.remove('active-section'));
-    const target = document.getElementById(id);
-    if(target) target.classList.add('active-section');
-
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    if(el) el.classList.add('active');
-
-    // Panggil data otomatis sesuai halaman
-    if(id === 'beranda') {
-      loadTotalPopulasi();
-      loadFollowUp();
-    }
-    if(id === 'catatan') loadKandangList();
-  }
-
-  function loadTotalPopulasi() {
-  fetch(SCRIPT_URL + "?action=getTotalPopulasi")
-    .then(res => res.json())
-    .then(data => {
-      // Mengisi angka ke elemen di Dashboard Home
-      document.getElementById('count_populasi').innerText = data.total;
-    })
-    .catch(err => console.error("Gagal muat populasi:", err));
-}
-  function loadFollowUp() {
-    const listDiv = document.getElementById('list_follow_up');
-    fetch(SCRIPT_URL + "?action=getMasalahAktif")
-      .then(res => res.json())
-      .then(data => {
-        let html = "";
-        if (!data || data.length === 0) {
-          html = '<div class="alert alert-success text-center">Semua ayam sehat!</div>';
+    function login() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        if (user === "fazar_n" && pass === "itqan900") {
+            localStorage.setItem("isLoggedIn", "true");
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            showSection('beranda');
         } else {
-          data.forEach(item => {
-            html += `<div class="card p-3 mb-2 border-start border-danger border-4">
-              <div class="d-flex justify-content-between align-items-center">
-                <div>
-                  <h6 class="mb-0 fw-bold">Kandang: ${item.kandang}</h6>
-                  <small class="text-danger">${item.masalah}</small>
-                </div>
-              </div>
-            </div>`;
-          });
+            alert("Username atau Password Salah!");
         }
-        listDiv.innerHTML = html;
-      });
-  }
-  // FUNGSI HITUNG USIA (Agar Error di Konsol Hilang)
-function hitungUsia() {
-  const minggu = document.getElementById('usia_awal').value;
-  const tgl = document.getElementById('tgl_datang').value;
-  if(minggu && tgl) {
-    const selisih = Math.floor((new Date() - new Date(tgl)) / (1000*60*60*24));
-    const totalHari = (parseInt(minggu)*7) + selisih;
-    const teks = Math.floor(totalHari/7) + " Minggu " + (totalHari%7) + " Hari";
-    document.getElementById('display_usia').innerText = teks;
-    document.getElementById('usia_skrg').value = teks;
-  }
-}
+    }
 
-function sendData(action) {
-  let url = `${SCRIPT_URL}?action=${action}`;
+    function logout() {
+        localStorage.removeItem("isLoggedIn");
+        location.reload();
+    }
 
-  // 1. MENGUMPULKAN DATA BERDASARKAN JENIS INPUT
-  if (action === 'simpanPopulasi') {
-    const knd = document.getElementById('kandang').value;
-    const u_awal = document.getElementById('usia_awal').value;
-    const tgl = document.getElementById('tgl_datang').value;
-    const u_skrg = document.getElementById('usia_skrg').value;
-    url += `&kandang=${knd}&usia_awal=${u_awal}&tgl_datang=${tgl}&usia_skrg=${u_skrg}`;
-  } 
-  else if (action === 'simpanProduksi') {
-    const tgl_p = document.getElementById('tgl_prod').value;
-    const jml_p = document.getElementById('jml_telur').value;
-    // Parameter ini harus sesuai dengan yang ada di Code.gs Anda
-    url += `&tgl_prod=${tgl_p}&jumlah_telur=${jml_p}`;
-  }
-  else if (action === 'simpanMasalah') {
-    const tgl = document.getElementById('tgl_masalah').value;
-    const knd = document.getElementById('kandang_masalah').value;
-    const msl = document.getElementById('masalah').value;
-    const ket = document.getElementById('ket_masalah').value;
-    // Label msl_ayam dan masalah harus sinkron dengan Apps Script
-    url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
-  }
-
-  // 2. PROSES PENGIRIMAN DATA KE GOOGLE SHEETS
-  fetch(url)
-    .then(res => res.json())
-    .then(result => {
-      if (result.status === "success") {
-        alert("Data Berhasil Disimpan!");
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
         
-        // 3. MEMBERSIHKAN FORM SETELAH BERHASIL DISIMPAN
+        if (id === 'beranda') {
+            loadDashboardData();
+            document.querySelectorAll('.nav-item')[0].classList.add('active');
+        } else if (id === 'data') {
+            document.querySelectorAll('.nav-item')[1].classList.add('active');
+        } else if (id === 'produksi') {
+            document.querySelectorAll('.nav-item')[2].classList.add('active');
+        } else if (id === 'catatan') {
+            loadKandangList();
+            document.querySelectorAll('.nav-item')[3].classList.add('active');
+        }
+    }
+
+    function hitungUsia() {
+        const tglDatang = new Date(document.getElementById('tgl_datang').value);
+        const usiaAwal = parseInt(document.getElementById('usia_awal').value) || 0;
+        if (!isNaN(tglDatang.getTime())) {
+            const hari = Math.floor((new Date() - tglDatang) / (1000 * 60 * 60 * 24));
+            const totalMinggu = usiaAwal + Math.floor(hari / 7);
+            document.getElementById('display_usia').innerText = totalMinggu + " Minggu";
+            document.getElementById('usia_skrg').value = totalMinggu;
+        }
+    }
+
+    function loadKandangList() {
+        fetch(`${SCRIPT_URL}?action=getKandang`)
+            .then(res => res.json())
+            .then(data => {
+                const select = document.getElementById('kandang_masalah');
+                select.innerHTML = '<option value="">-- Pilih No Kandang --</option>';
+                data.forEach(k => {
+                    select.innerHTML += `<option value="${k}">${k}</option>`;
+                });
+            });
+    }
+
+    function loadDashboardData() {
+        fetch(`${SCRIPT_URL}?action=getDashboard`)
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('total-populasi').innerText = data.totalPopulasi;
+                const list = document.getElementById('list-masalah');
+                list.innerHTML = "";
+                if (data.masalahActive && data.masalahActive.length > 0) {
+                    data.masalahActive.forEach(m => {
+                        list.innerHTML += `
+                            <div class="follow-up-card">
+                                <h4>Kandang: ${m.kandang}</h4>
+                                <p style="margin:3px 0; font-size:13px; color:#555;">${m.kondisi}</p>
+                            </div>`;
+                    });
+                } else {
+                    list.innerHTML = "<p style='text-align:center; opacity:0.5;'>Tidak ada masalah aktif</p>";
+                }
+            });
+    }
+
+    function sendData(action) {
+        let url = `${SCRIPT_URL}?action=${action}`;
+        
         if (action === 'simpanPopulasi') {
-          document.getElementById('kandang').value = "";
-          document.getElementById('usia_awal').value = "";
-          document.getElementById('tgl_datang').value = "";
-          if(document.getElementById('display_usia')) document.getElementById('display_usia').innerText = "-";
+            const knd = document.getElementById('kandang').value;
+            const u_awal = document.getElementById('usia_awal').value;
+            const tgl = document.getElementById('tgl_datang').value;
+            const u_skrg = document.getElementById('usia_skrg').value;
+            if(!knd) return alert("Kandang harus diisi!");
+            url += `&kandang=${knd}&usia_awal=${u_awal}&tgl_datang=${tgl}&usia_skrg=${u_skrg}`;
         } 
         else if (action === 'simpanProduksi') {
-          if(document.getElementById('jml_telur')) document.getElementById('jml_telur').value = "";
+            const tgl = document.getElementById('tgl_prod').value;
+            const jml = document.getElementById('jml_telur').value;
+            if(!tgl || !jml) return alert("Lengkapi data produksi!");
+            url += `&tgl_prod=${tgl}&jumlah_telur=${jml}`;
         }
         else if (action === 'simpanMasalah') {
-          document.getElementById('tgl_masalah').value = "";
-          document.getElementById('kandang_masalah').value = "";
-          document.getElementById('masalah').value = "";
-          document.getElementById('ket_masalah').value = "";
+            const tgl = document.getElementById('tgl_masalah').value;
+            const knd = document.getElementById('kandang_masalah').value;
+            const msl = document.getElementById('masalah').value;
+            const ket = document.getElementById('ket_masalah').value;
+            if(!tgl || !knd || !msl) return alert("Lengkapi data masalah!");
+            url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
         }
+
+        fetch(url)
+            .then(res => res.json())
+            .then(result => {
+                if (result.status === "success") {
+                    alert("Data Berhasil Disimpan!");
+                    location.reload();
+                }
+            })
+            .catch(err => alert("Gagal Simpan: " + err));
+    }
+
+    window.onload = function() {
+        document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {
+            weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        });
         
-        // Kembali ke dashboard agar angka terupdate
-        showSection('beranda');
-      }
-    })
-    .catch(err => {
-      console.error("Error saat simpan:", err);
-      alert("Gagal simpan: " + err);
-    });
-}
-
-// FUNGSI OTOMATIS SAAT HALAMAN DIBUKA/DIREFRESH
-window.onload = function() {
-  // Update Widget Tanggal di Dashboard
-  if(document.getElementById('date-widget')) {
-    document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {
-      weekday: 'long', day: 'numeric', month: 'long'
-    });
-  }
-
-  // FITUR AUTO LOGIN: Tetap masuk jika sebelumnya sudah login
-  if (localStorage.getItem("isLoggedIn") === "true") {
-    const loginPg = document.getElementById('loginPage');
-    const mainAp = document.getElementById('mainApp');
-    if(loginPg) loginPg.style.display = 'none';
-    if(mainAp) mainAp.style.display = 'block';
-    showSection('beranda');
-  }
-};
-  function logout() {
-  localStorage.removeItem("isLoggedIn"); // Menghapus status login
-  location.reload(); // Muat ulang halaman agar balik ke form login
-}
-  };
+        if (localStorage.getItem("isLoggedIn") === "true") {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            showSection('beranda');
+        }
+    };
 </script>
+
 </body>
 </html>
