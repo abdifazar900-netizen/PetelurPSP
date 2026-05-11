@@ -193,8 +193,9 @@ function sendData(action) {
     fetch(url)
       .then(res => res.json())
       .then(result => {
-        if(result.status === "success") {
-          alert("Data Berhasil Disimpan!");
+        .then(result => {
+  if (result.status === "success") {
+    alert("Data Berhasil Disimpan!");
           location.reload(); // Refresh untuk update dashboard
         }
       })
@@ -203,13 +204,10 @@ function sendData(action) {
 }
 
   // AUTO LOGIN SAAT REFRESH
-  window.onload = function() {
-    document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long'});
-    
-    if(localStorage.getItem("isLoggedIn") === "true") {
-      document.getElementById('loginPage').style.display = 'none';
-      document.getElementById('mainApp').style.display = 'block';
-      showSection('beranda');
+ document.getElementById('kandang').value = "";
+    document.getElementById('usia_awal').value = "";
+    document.getElementById('tgl_datang').value = "";
+    document.getElementById('display_usia').innerText = "-";
     }
   };
 </script>
