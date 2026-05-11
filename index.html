@@ -181,33 +181,47 @@ function hitungUsia() {
 
 // FUNGSI KIRIM DATA
 function sendData(action) {
+  let url = `${SCRIPT_URL}?action=${action}`;
+
+  // JIKA INPUT POPULASI
   if (action === 'simpanPopulasi') {
     const knd = document.getElementById('kandang').value;
     const u_awal = document.getElementById('usia_awal').value;
     const tgl = document.getElementById('tgl_datang').value;
     const u_skrg = document.getElementById('usia_skrg').value;
+    url += `&kandang=${knd}&usia_awal=${u_awal}&tgl_datang=${tgl}&usia_skrg=${u_skrg}`;
+  } 
+  // JIKA INPUT PRODUKSI
+  else if (action === 'simpanProduksi') {
+    const tgl_p = document.getElementById('tgl_produksi').value;
+    const knd_p = document.getElementById('kandang_produksi').value;
+    const jml_p = document.getElementById('jumlah_telur').value;
+    const brt_p = document.getElementById('berat_telur').value;
+    url += `&tgl_prod=${tgl_p}&kandang_prod=${knd_p}&jumlah_telur=${jml_p}&berat_telur=${brt_p}`;
+  }
 
-    // Pastikan SCRIPT_URL sudah benar di bagian atas
-    const url = `${SCRIPT_URL}?action=${action}&kandang=${knd}&usia_awal=${u_awal}&tgl_datang=${tgl}&usia_skrg=${u_skrg}`;
-    
-    fetch(url)
-      .then(res => res.json())
-      .then(result => {
-        if (result.status === "success") {
-          alert("Data Berhasil Disimpan!");
-          
-          // MEMBERSIHKAN FORM
+  fetch(url)
+    .then(res => res.json())
+    .then(result => {
+      if (result.status === "success") {
+        alert("Data Berhasil Disimpan!");
+        
+        // Bersihkan Form (Populasi atau Produksi)
+        if(action === 'simpanPopulasi') {
           document.getElementById('kandang').value = "";
           document.getElementById('usia_awal').value = "";
           document.getElementById('tgl_datang').value = "";
           document.getElementById('display_usia').innerText = "-";
-          
-          // LANGSUNG PINDAH KE BERANDA (Solusi agar tidak reload ke login)
-          showSection('beranda'); 
+        } else {
+          document.getElementById('jumlah_telur').value = "";
+          document.getElementById('berat_telur').value = "";
         }
-      })
-      .catch(err => alert("Gagal simpan: " + err));
-  }
+        
+        // Kembali ke Beranda agar angka populasi/produksi terupdate
+        showSection('beranda');
+      }
+    })
+    .catch(err => alert("Gagal simpan: " + err));
 }
   // AUTO LOGIN SAAT REFRESH
 window.onload = function() {
