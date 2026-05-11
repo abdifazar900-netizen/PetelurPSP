@@ -200,18 +200,17 @@ function sendData(action) {
     const knd = document.getElementById('kandang_masalah').value;
     const msl = document.getElementById('masalah').value;
     const ket = document.getElementById('ket_masalah').value;
-    // Sinkronkan label parameter dengan Code.gs
     url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
   }
 
-  // 2. PROSES PENGIRIMAN (Cukup satu kali fetch)
+  // 2. PROSES PENGIRIMAN
   fetch(url)
     .then(res => res.json())
     .then(result => {
       if (result.status === "success") {
         alert("Data Berhasil Disimpan!");
         
-        // 3. MEMBERSIHKAN FORM SETELAH BERHASIL
+        // 3. MEMBERSIHKAN FORM
         if (action === 'simpanPopulasi') {
           document.getElementById('kandang').value = "";
           document.getElementById('usia_awal').value = "";
@@ -227,7 +226,6 @@ function sendData(action) {
           document.getElementById('masalah').value = "";
           document.getElementById('ket_masalah').value = "";
         }
-        
         showSection('beranda');
       }
     })
@@ -237,21 +235,22 @@ function sendData(action) {
     });
 }
 
-// Pastikan kode window.onload berada di LUAR fungsi sendData
+// FUNGSI SAAT HALAMAN DI-REFRESH
 window.onload = function() {
+  // Tampilkan Tanggal
   if(document.getElementById('date-widget')) {
     document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {
       weekday: 'long', day: 'numeric', month: 'long'
     });
   }
-};
 
-  // LOGIKA AUTO LOGIN (Sangat Penting!)
+  // LOGIKA AUTO LOGIN
   if (localStorage.getItem("isLoggedIn") === "true") {
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('mainApp').style.display = 'block';
-    showSection('beranda'); // Langsung muat data dashboard
+    if(document.getElementById('loginPage')) document.getElementById('loginPage').style.display = 'none';
+    if(document.getElementById('mainApp')) document.getElementById('mainApp').style.display = 'block';
+    showSection('beranda');
   }
+};
   function logout() {
   localStorage.removeItem("isLoggedIn"); // Menghapus status login
   location.reload(); // Muat ulang halaman agar balik ke form login
