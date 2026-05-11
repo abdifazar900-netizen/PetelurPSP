@@ -212,8 +212,8 @@ function sendData(action) {
           document.getElementById('tgl_datang').value = "";
           document.getElementById('display_usia').innerText = "-";
         } else {
-          document.getElementById('jumlah_telur').value = "";
-          document.getElementById('berat_telur').value = "";
+         if(document.getElementById('jml_telur')) {
+    document.getElementById('jml_telur').value = "";
         }
         
         // Kembali ke Beranda agar angka populasi/produksi terupdate
