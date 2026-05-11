@@ -178,11 +178,10 @@ function hitungUsia() {
   }
 }
 
-// FUNGSI KIRIM DATA
 function sendData(action) {
   let url = `${SCRIPT_URL}?action=${action}`;
 
-  // 1. MENGUMPULKAN DATA
+  // 1. MENGUMPULKAN DATA BERDASARKAN JENIS INPUT
   if (action === 'simpanPopulasi') {
     const knd = document.getElementById('kandang').value;
     const u_awal = document.getElementById('usia_awal').value;
@@ -193,6 +192,7 @@ function sendData(action) {
   else if (action === 'simpanProduksi') {
     const tgl_p = document.getElementById('tgl_prod').value;
     const jml_p = document.getElementById('jml_telur').value;
+    // Parameter ini harus sesuai dengan yang ada di Code.gs Anda
     url += `&tgl_prod=${tgl_p}&jumlah_telur=${jml_p}`;
   }
   else if (action === 'simpanMasalah') {
@@ -200,17 +200,18 @@ function sendData(action) {
     const knd = document.getElementById('kandang_masalah').value;
     const msl = document.getElementById('masalah').value;
     const ket = document.getElementById('ket_masalah').value;
+    // Label msl_ayam dan masalah harus sinkron dengan Apps Script
     url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
   }
 
-  // 2. PROSES PENGIRIMAN
+  // 2. PROSES PENGIRIMAN DATA KE GOOGLE SHEETS
   fetch(url)
     .then(res => res.json())
     .then(result => {
       if (result.status === "success") {
         alert("Data Berhasil Disimpan!");
         
-        // 3. MEMBERSIHKAN FORM
+        // 3. MEMBERSIHKAN FORM SETELAH BERHASIL DISIMPAN
         if (action === 'simpanPopulasi') {
           document.getElementById('kandang').value = "";
           document.getElementById('usia_awal').value = "";
@@ -226,28 +227,32 @@ function sendData(action) {
           document.getElementById('masalah').value = "";
           document.getElementById('ket_masalah').value = "";
         }
+        
+        // Kembali ke dashboard agar angka terupdate
         showSection('beranda');
       }
     })
     .catch(err => {
-      console.error(err);
+      console.error("Error saat simpan:", err);
       alert("Gagal simpan: " + err);
     });
 }
 
-// FUNGSI GLOBAL SAAT HALAMAN DI-REFRESH
+// FUNGSI OTOMATIS SAAT HALAMAN DIBUKA/DIREFRESH
 window.onload = function() {
-  // Tampilkan Tanggal Hari Ini
+  // Update Widget Tanggal di Dashboard
   if(document.getElementById('date-widget')) {
     document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {
       weekday: 'long', day: 'numeric', month: 'long'
     });
   }
 
-  // LOGIKA AUTO LOGIN
+  // FITUR AUTO LOGIN: Tetap masuk jika sebelumnya sudah login
   if (localStorage.getItem("isLoggedIn") === "true") {
-    if(document.getElementById('loginPage')) document.getElementById('loginPage').style.display = 'none';
-    if(document.getElementById('mainApp')) document.getElementById('mainApp').style.display = 'block';
+    const loginPg = document.getElementById('loginPage');
+    const mainAp = document.getElementById('mainApp');
+    if(loginPg) loginPg.style.display = 'none';
+    if(mainAp) mainAp.style.display = 'block';
     showSection('beranda');
   }
 };
