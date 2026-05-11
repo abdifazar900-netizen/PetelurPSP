@@ -182,7 +182,7 @@ function hitungUsia() {
 function sendData(action) {
   let url = `${SCRIPT_URL}?action=${action}`;
 
-  // 1. MENGUMPULKAN DATA BERDASARKAN ACTION
+  // 1. MENGUMPULKAN DATA
   if (action === 'simpanPopulasi') {
     const knd = document.getElementById('kandang').value;
     const u_awal = document.getElementById('usia_awal').value;
@@ -235,9 +235,9 @@ function sendData(action) {
     });
 }
 
-// FUNGSI SAAT HALAMAN DI-REFRESH
+// FUNGSI GLOBAL SAAT HALAMAN DI-REFRESH
 window.onload = function() {
-  // Tampilkan Tanggal
+  // Tampilkan Tanggal Hari Ini
   if(document.getElementById('date-widget')) {
     document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {
       weekday: 'long', day: 'numeric', month: 'long'
