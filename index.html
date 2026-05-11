@@ -182,7 +182,7 @@ function hitungUsia() {
 function sendData(action) {
   let url = `${SCRIPT_URL}?action=${action}`;
 
-  // JIKA INPUT POPULASI
+  // 1. MENGUMPULKAN DATA BERDASARKAN ACTION
   if (action === 'simpanPopulasi') {
     const knd = document.getElementById('kandang').value;
     const u_awal = document.getElementById('usia_awal').value;
@@ -190,65 +190,61 @@ function sendData(action) {
     const u_skrg = document.getElementById('usia_skrg').value;
     url += `&kandang=${knd}&usia_awal=${u_awal}&tgl_datang=${tgl}&usia_skrg=${u_skrg}`;
   } 
-  // JIKA INPUT PRODUKSI
   else if (action === 'simpanProduksi') {
     const tgl_p = document.getElementById('tgl_prod').value;
     const jml_p = document.getElementById('jml_telur').value;
-    
-    // Hanya mengirim tgl_prod dan jumlah_telur saja
     url += `&tgl_prod=${tgl_p}&jumlah_telur=${jml_p}`;
   }
+  else if (action === 'simpanMasalah') {
+    const tgl = document.getElementById('tgl_masalah').value;
+    const knd = document.getElementById('kandang_masalah').value;
+    const msl = document.getElementById('masalah').value;
+    const ket = document.getElementById('ket_masalah').value;
+    // Sinkronkan label parameter dengan Code.gs
+    url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
+  }
+
+  // 2. PROSES PENGIRIMAN (Cukup satu kali fetch)
   fetch(url)
     .then(res => res.json())
     .then(result => {
       if (result.status === "success") {
         alert("Data Berhasil Disimpan!");
         
-        // Bersihkan Form (Populasi atau Produksi)
-        if(action === 'simpanPopulasi') {
+        // 3. MEMBERSIHKAN FORM SETELAH BERHASIL
+        if (action === 'simpanPopulasi') {
           document.getElementById('kandang').value = "";
           document.getElementById('usia_awal').value = "";
           document.getElementById('tgl_datang').value = "";
-          document.getElementById('display_usia').innerText = "-";
+          if(document.getElementById('display_usia')) document.getElementById('display_usia').innerText = "-";
+        } 
+        else if (action === 'simpanProduksi') {
+          if(document.getElementById('jml_telur')) document.getElementById('jml_telur').value = "";
         }
-   
-  if (action === 'simpanMasalah') {
-    const tgl = document.getElementById('tgl_masalah').value;
-    const knd = document.getElementById('kandang_masalah').value;
-    const msl = document.getElementById('masalah').value;
-    const ket = document.getElementById('ket_masalah').value;
-    
-    // Sinkronkan label parameter dengan Code.gs
-    url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
-  }
-
-  // Kirim data ke Google Apps Script
-  fetch(url)
-    .then(res => res.json())
-    .then(result => {
-      if (result.status === "success") {
-        alert("Data Berhasil Disimpan!");
-
-        // --- BAGIAN MEMBERSIHKAN FORM ---
-        if (action === 'simpanMasalah') {
+        else if (action === 'simpanMasalah') {
           document.getElementById('tgl_masalah').value = "";
           document.getElementById('kandang_masalah').value = "";
           document.getElementById('masalah').value = "";
           document.getElementById('ket_masalah').value = "";
         }
+        
         showSection('beranda');
       }
     })
-    .catch(err => alert("Gagal simpan: " + err));
-      }
-  // AUTO LOGIN SAAT REFRESH
+    .catch(err => {
+      console.error(err);
+      alert("Gagal simpan: " + err);
+    });
+}
+
+// Pastikan kode window.onload berada di LUAR fungsi sendData
 window.onload = function() {
-  // Menampilkan tanggal hari ini
   if(document.getElementById('date-widget')) {
     document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', {
       weekday: 'long', day: 'numeric', month: 'long'
     });
   }
+};
 
   // LOGIKA AUTO LOGIN (Sangat Penting!)
   if (localStorage.getItem("isLoggedIn") === "true") {
