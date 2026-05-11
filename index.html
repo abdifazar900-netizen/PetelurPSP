@@ -193,12 +193,11 @@ function sendData(action) {
   } 
   // JIKA INPUT PRODUKSI
   else if (action === 'simpanProduksi') {
-    // Ambil ID sesuai yang ada di HTML atas
-    const tgl = document.getElementById('tgl_prod').value;
-    const jml = document.getElementById('jml_telur').value;
-    const brt = document.getElementById('brt_telur') ? document.getElementById('brt_telur').value : 0;
+    const tgl_p = document.getElementById('tgl_prod').value;
+    const jml_p = document.getElementById('jml_telur').value;
     
-    url += `&tgl_prod=${tgl}&jumlah_telur=${jml}&berat_telur=${brt}`;
+    // Hanya mengirim tgl_prod dan jumlah_telur saja
+    url += `&tgl_prod=${tgl_p}&jumlah_telur=${jml_p}`;
   }
   fetch(url)
     .then(res => res.json())
