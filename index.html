@@ -214,12 +214,12 @@ function sendData(action) {
           // Tambahkan ini di dalam function sendData(action)
 else if (action === 'simpanMasalah') {
   const tgl = document.getElementById('tgl_masalah').value;
-  const knd = document.getElementById('kandang_masalah').value; // Input teks baru
-  const msl = document.getElementById('masalah').value;
-  const ket = document.getElementById('ket_masalah').value;
+  const knd = document.getElementById('kandang_masalah').value;
+  const det = document.getElementById('masalah').value; // Ini untuk Detail_Ayam (Sakit/Mati)
+  const ket = document.getElementById('ket_masalah').value; // Ini untuk Keterangan Masalah
   
-  // Kirim parameter dengan nama yang sesuai untuk Code.gs
-  url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&masalah=${msl}&ket_masalah=${ket}`;
+  // Pastikan nama parameter (setelah tanda =) sama dengan di Code.gs
+  url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${det}&masalah=${ket}`;
 }
 
 // --- BAGIAN PEMBERSIHAN FORM DI DALAM .then ---
