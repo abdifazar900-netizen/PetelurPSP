@@ -166,6 +166,41 @@
         listDiv.innerHTML = html;
       });
   }
+  // FUNGSI HITUNG USIA (Agar Error di Konsol Hilang)
+function hitungUsia() {
+  const minggu = document.getElementById('usia_awal').value;
+  const tgl = document.getElementById('tgl_datang').value;
+  if(minggu && tgl) {
+    const selisih = Math.floor((new Date() - new Date(tgl)) / (1000*60*60*24));
+    const totalHari = (parseInt(minggu)*7) + selisih;
+    const teks = Math.floor(totalHari/7) + " Minggu " + (totalHari%7) + " Hari";
+    document.getElementById('display_usia').innerText = teks;
+    document.getElementById('usia_skrg').value = teks;
+  }
+}
+
+// FUNGSI KIRIM DATA
+function sendData(action) {
+  if(action === 'simpanPopulasi') {
+    const knd = document.getElementById('kandang').value;
+    const u_awal = document.getElementById('usia_awal').value;
+    const tgl = document.getElementById('tgl_datang').value;
+    const u_skrg = document.getElementById('usia_skrg').value;
+
+    // Kirim dengan parameter yang sesuai dengan doGet
+    const url = `${SCRIPT_URL}?action=${action}&kandang=${knd}&usia_awal=${u_awal}&tgl_datang=${tgl}&usia_skrg=${u_skrg}`;
+    
+    fetch(url)
+      .then(res => res.json())
+      .then(result => {
+        if(result.status === "success") {
+          alert("Data Berhasil Disimpan!");
+          location.reload(); // Refresh untuk update dashboard
+        }
+      })
+      .catch(err => alert("Gagal simpan: " + err));
+  }
+}
 
   // AUTO LOGIN SAAT REFRESH
   window.onload = function() {
