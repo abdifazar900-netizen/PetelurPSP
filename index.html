@@ -8,13 +8,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
         :root { --primary-brown: #8D6E63; }
-        body { background-color: #f4f1ea; padding-bottom: 80px; font-family: sans-serif; }
-        .header { background: var(--primary-brown); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        body { background-color: #f4f1ea; padding-bottom: 80px; }
+        .header { background: var(--primary-brown); color: white; padding: 15px; position: sticky; top: 0; z-index: 100; }
         .section { display: none; }
         .section.active { display: block; }
         #loginPage { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #121212; z-index: 1000; display: flex; justify-content: center; align-items: center; }
-        .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
-        .nav-item { color: #999; cursor: pointer; text-align: center; flex: 1; text-decoration: none; font-size: 12px; }
+        .nav-bottom { position: fixed; bottom: 0; width: 100%; background: white; border-top: 1px solid #ddd; display: flex; justify-content: space-around; padding: 10px 0; }
+        .nav-item { color: #999; cursor: pointer; text-align: center; font-size: 12px; flex: 1; }
         .nav-item.active { color: var(--primary-brown); font-weight: bold; }
         .nav-item i { font-size: 20px; display: block; }
     </style>
@@ -22,72 +22,57 @@
 <body>
 
 <div id="loginPage">
-    <div class="card p-4 shadow-lg" style="width: 320px; border-radius: 15px;">
-        <div class="text-center mb-4">
-            <h5 class="fw-bold mb-0">PETELUR APP</h5>
-            <small class="text-muted">Pasir Picung Farm</small>
-        </div>
-        <div class="mb-2">
-            <input type="text" id="username" class="form-control" placeholder="Username">
-        </div>
-        <div class="mb-3">
-            <input type="password" id="password" class="form-control" placeholder="Password">
-        </div>
+    <div class="card p-4 shadow" style="width: 320px;">
+        <h5 class="text-center fw-bold mb-4">LOGIN PETELUR APP</h5>
+        <input type="text" id="username" class="form-control mb-2" placeholder="Username">
+        <input type="password" id="password" class="form-control mb-3" placeholder="Password">
         <button class="btn w-100 text-white" style="background: var(--primary-brown);" onclick="handleLogin()">MASUK</button>
     </div>
 </div>
 
 <div id="mainApp" style="display: none;">
-    <div class="header d-flex justify-content-between align-items: center;">
-        <div>
-            <small id="date-widget" class="d-block" style="font-size: 11px; opacity: 0.8;"></small>
-            <span class="fw-bold">Dashboard Farm</span>
-        </div>
-        <button onclick="logout()" class="btn btn-sm btn-outline-light border-0"><i class="bi bi-box-arrow-right"></i></button>
+    <div class="header d-flex justify-content-between">
+        <span id="date-widget" style="font-size: 14px;"></span>
+        <i class="bi bi-box-arrow-right" onclick="logout()"></i>
     </div>
 
     <div class="container mt-3">
         <div id="beranda" class="section active">
-            <div class="card p-3 mb-3 shadow-sm border-0">
+            <div class="card p-3 mb-3 text-center border-0 shadow-sm">
                 <small class="text-muted">Total Populasi Ayam</small>
-                <h1 id="total-populasi" class="display-4 fw-bold text-brown">-</h1>
-                <small>Ekor</small>
+                <h1 id="total-populasi" class="fw-bold">...</h1>
             </div>
-            <h6 class="fw-bold mb-3"><i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>Masalah Aktif</h6>
-            <div id="list-masalah" class="text-center text-muted small">Memuat data...</div>
+            <h6 class="fw-bold"><i class="bi bi-warning text-danger"></i> Masalah Aktif</h6>
+            <div id="list-masalah" class="mt-2">Memuat data...</div>
         </div>
 
         <div id="data" class="section">
-            <h6 class="fw-bold mb-3">Input Populasi Baru</h6>
-            <div class="card p-3 shadow-sm border-0">
+            <h6 class="fw-bold">Tambah Populasi</h6>
+            <div class="card p-3 border-0 shadow-sm">
                 <input type="text" id="knd_pop" class="form-control mb-2" placeholder="No Kandang">
                 <input type="number" id="usia_awal" class="form-control mb-2" placeholder="Usia Awal (Minggu)">
                 <input type="date" id="tgl_datang" class="form-control mb-3">
-                <button class="btn btn-primary w-100" onclick="simpan('simpanPopulasi')">Simpan Populasi</button>
+                <button class="btn btn-primary w-100" onclick="simpanData('simpanPopulasi')">Simpan Populasi</button>
             </div>
         </div>
 
         <div id="produksi" class="section">
-            <h6 class="fw-bold mb-3">Input Produksi Harian</h6>
-            <div class="card p-3 shadow-sm border-0">
+            <h6 class="fw-bold">Input Produksi</h6>
+            <div class="card p-3 border-0 shadow-sm">
                 <input type="date" id="tgl_prod" class="form-control mb-2">
-                <input type="number" id="jml_telur" class="form-control mb-3" placeholder="Jumlah Telur (Butir)">
-                <button class="btn btn-success w-100" onclick="simpan('simpanProduksi')">Simpan Produksi</button>
+                <input type="number" id="jml_telur" class="form-control mb-3" placeholder="Jumlah Telur">
+                <button class="btn btn-success w-100" onclick="simpanData('simpanProduksi')">Simpan Produksi</button>
             </div>
         </div>
 
         <div id="catatan" class="section">
-            <h6 class="fw-bold mb-3">Input Masalah Kandang</h6>
-            <div class="card p-3 shadow-sm border-0">
+            <h6 class="fw-bold">Input Masalah</h6>
+            <div class="card p-3 border-0 shadow-sm">
                 <input type="date" id="tgl_masalah" class="form-control mb-2">
                 <input type="text" id="knd_masalah" class="form-control mb-2" placeholder="No Kandang">
-                <select id="jenis_masalah" class="form-select mb-2">
-                    <option value="Sakit">Sakit</option>
-                    <option value="Mati">Mati</option>
-                    <option value="Lainnya">Lainnya</option>
-                </select>
-                <textarea id="ket_masalah" class="form-control mb-3" placeholder="Keterangan tambahan..."></textarea>
-                <button class="btn btn-danger w-100" onclick="simpan('simpanMasalah')">Simpan Masalah</button>
+                <input type="text" id="msl_ayam" class="form-control mb-2" placeholder="Jenis Masalah">
+                <textarea id="ket_masalah" class="form-control mb-3" placeholder="Keterangan"></textarea>
+                <button class="btn btn-danger w-100" onclick="simpanData('simpanMasalah')">Simpan Masalah</button>
             </div>
         </div>
     </div>
@@ -96,38 +81,24 @@
         <div class="nav-item active" onclick="showSection('beranda', this)"><i class="bi bi-house"></i>Home</div>
         <div class="nav-item" onclick="showSection('data', this)"><i class="bi bi-plus-circle"></i>Data</div>
         <div class="nav-item" onclick="showSection('produksi', this)"><i class="bi bi-egg"></i>Produksi</div>
-        <div class="nav-item" onclick="showSection('catatan', this)"><i class="bi bi-chat-dots"></i>Catatan</div>
+        <div class="nav-item" onclick="showSection('catatan', this)"><i class="bi bi-journal-text"></i>Catatan</div>
     </div>
 </div>
 
 <script>
-    // URL Web App dari Deploy Apps Script Anda
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqZ-w_0_pY2A1f6vL0n0qU0fA_m3_aI0vW8_8_8_8/exec";
 
-    // 1. FUNGSI LOGIN (Sesuai case "checkLogin" di Code.gs)
+    // 1. LOGIN (POST sesuai case "checkLogin")
     async function handleLogin() {
         const u = document.getElementById('username').value;
         const p = document.getElementById('password').value;
-        
-        try {
-            const response = await fetch(SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify({ action: "checkLogin", u: u, p: p })
-            });
-            const res = await response.json();
-            if (res.auth) {
-                localStorage.setItem("isLoggedIn", "true");
-                startApp();
-            } else {
-                alert("Login Gagal! Periksa kembali user/pass.");
-            }
-        } catch (e) { alert("Error koneksi ke server"); }
-    }
-
-    function startApp() {
-        document.getElementById('loginPage').style.display = 'none';
-        document.getElementById('mainApp').style.display = 'block';
-        showSection('beranda');
+        const res = await apiCall({ action: "checkLogin", u: u, p: p });
+        if (res && res.auth) {
+            localStorage.setItem("isLoggedIn", "true");
+            location.reload();
+        } else {
+            alert("Login Gagal!");
+        }
     }
 
     function logout() {
@@ -135,59 +106,82 @@
         location.reload();
     }
 
-    // 2. NAVIGASI
+    // 2. NAVIGASI & LOAD DATA
     function showSection(id, el) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         if(el) el.classList.add('active');
-        if(id === 'beranda') loadData();
+        if(id === 'beranda') loadDashboard();
     }
 
-    // 3. SIMPAN DATA (POST Method sesuai doPost di Code.gs)
-    async function simpan(action) {
-        let payload = { action: action };
-
-        if (action === 'simpanPopulasi') {
-            payload.kandang = document.getElementById('knd_pop').value;
-            payload.usia_awal = document.getElementById('usia_awal').value;
-            payload.tgl_datang = document.getElementById('tgl_datang').value;
-            payload.usia_skrg = payload.usia_awal; // Logika sederhana
-        } 
-        else if (action === 'simpanProduksi') {
-            payload.tgl = document.getElementById('tgl_prod').value;
-            payload.jumlah = document.getElementById('jml_telur').value;
-        }
-        else if (action === 'simpanMasalah') {
-            payload.tgl = document.getElementById('tgl_masalah').value;
-            payload.kandang = document.getElementById('knd_masalah').value;
-            payload.masalah = document.getElementById('jenis_masalah').value;
-            payload.ket = document.getElementById('ket_masalah').value;
-        }
-
+    // 3. FUNGSI UTAMA CALL API (POST JSON)
+    async function apiCall(payload) {
         try {
             const response = await fetch(SCRIPT_URL, {
                 method: "POST",
                 body: JSON.stringify(payload)
             });
-            const res = await response.json();
-            alert(res.message);
-            location.reload();
-        } catch (e) { alert("Gagal mengirim data"); }
+            return await response.json();
+        } catch (e) {
+            console.error(e);
+            return null;
+        }
     }
 
-    // 4. LOAD DASHBOARD (Sesuai getDashboard/getMasalahAktif di Code.gs)
-    function loadData() {
-        // Implementasi fetching dashboard jika Code.gs mendukung GET untuk dashboard
-        // Untuk saat ini hanya menampilkan placeholder agar tidak error
-        document.getElementById('total-populasi').innerText = "...";
+    // 4. SIMPAN DATA (POST sesuai case di Code.gs)
+    async function simpanData(action) {
+        let payload = { action: action };
+        if (action === 'simpanPopulasi') {
+            payload.kandang = document.getElementById('knd_pop').value;
+            payload.usia_awal = document.getElementById('usia_awal').value;
+            payload.tgl_datang = document.getElementById('tgl_datang').value;
+            payload.usia_skrg = payload.usia_awal;
+        } else if (action === 'simpanProduksi') {
+            payload.tgl = document.getElementById('tgl_prod').value;
+            payload.jumlah = document.getElementById('jml_telur').value;
+        } else if (action === 'simpanMasalah') {
+            payload.tgl = document.getElementById('tgl_masalah').value;
+            payload.kandang = document.getElementById('knd_masalah').value;
+            payload.masalah = document.getElementById('msl_ayam').value;
+            payload.ket = document.getElementById('ket_masalah').value;
+        }
+
+        const res = await apiCall(payload);
+        if (res) {
+            alert(res.message || "Berhasil!");
+            location.reload();
+        }
+    }
+
+    // 5. LOAD DASHBOARD (POST sesuai case "getDashboard")
+    async function loadDashboard() {
+        const res = await apiCall({ action: "getDashboard" });
+        if (res) {
+            document.getElementById('total-populasi').innerText = res.totalPopulasi || "0";
+            const list = document.getElementById('list-masalah');
+            list.innerHTML = "";
+            if (res.masalahActive && res.masalahActive.length > 0) {
+                res.masalahActive.forEach(m => {
+                    list.innerHTML += `<div class="card p-2 mb-2 border-start border-danger border-4 shadow-sm">
+                        <strong>Kandang ${m.kandang}</strong>
+                        <small>${m.kondisi} - ${m.ket || ''}</small>
+                    </div>`;
+                });
+            } else {
+                list.innerHTML = "<p class='text-muted small'>Tidak ada masalah aktif.</p>";
+            }
+        }
     }
 
     window.onload = () => {
         document.getElementById('date-widget').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' });
-        if (localStorage.getItem("isLoggedIn") === "true") startApp();
+        if (localStorage.getItem("isLoggedIn") === "true") {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('mainApp').style.display = 'block';
+            loadDashboard();
+        }
     };
 </script>
-
 </body>
 </html>
