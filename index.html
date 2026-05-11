@@ -224,6 +224,10 @@ window.onload = function() {
     document.getElementById('mainApp').style.display = 'block';
     showSection('beranda'); // Langsung muat data dashboard
   }
+  function logout() {
+  localStorage.removeItem("isLoggedIn"); // Menghapus status login
+  location.reload(); // Muat ulang halaman agar balik ke form login
+}
   };
 </script>
 </body>
