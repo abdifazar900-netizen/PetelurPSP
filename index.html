@@ -79,20 +79,19 @@
     </div>
   </div>
 
-  <div id="catatan" class="section">
-    <h6>Input Masalah</h6>
-    <div class="card p-3">
-      <input type="date" id="tgl_catatan" class="form-control mb-2">
-      <select id="select_kandang" class="form-select mb-2">
-  <option value="">-- Pilih No Kandang --</option>
-</select>
-      <select id="masalah_ayam" class="form-select mb-2">
-        <option>Sakit</option><option>Mati</option><option>Produksi Turun</option>
-      </select>
-      <textarea id="ket_masalah" class="form-control mb-3" placeholder="Keterangan"></textarea>
+<div id="catatan" class="section">
+    <h6>Input Masalah / Catatan Kandang</h6>
+    <div class="card p-3 shadow-sm">
+      <input type="date" id="tgl_masalah" class="form-control mb-2">
+      
+      <input type="text" id="kandang_masalah" class="form-control mb-2" placeholder="Masukkan No Kandang (Contoh: K01)">
+      
+      <input type="text" id="masalah" class="form-control mb-2" placeholder="Jenis Masalah (Contoh: Ayam Lemas)">
+      <textarea id="ket_masalah" class="form-control mb-3" placeholder="Keterangan Tambahan"></textarea>
+      
       <button class="btn w-100 text-white" style="background:var(--primary-brown)" onclick="sendData('simpanMasalah')">Simpan Masalah</button>
     </div>
-  </div>
+</div>
 
   <div class="nav-bottom">
   <div onclick="showSection('beranda', this)" class="nav-item active"><i class="bi bi-house d-block fs-5"></i>Home</div>
@@ -211,7 +210,17 @@ function sendData(action) {
           document.getElementById('usia_awal').value = "";
           document.getElementById('tgl_datang').value = "";
           document.getElementById('display_usia').innerText = "-";
-        } else {
+        }
+          // Tambahkan ini di dalam function sendData(action)
+else if (action === 'simpanMasalah') {
+  const tgl = document.getElementById('tgl_masalah').value;
+  const knd = document.getElementById('kandang_masalah').value;
+  const msl = document.getElementById('masalah').value;
+  const ket = document.getElementById('ket_masalah').value;
+  
+  url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&masalah=${msl}&ket_masalah=${ket}`;
+}
+        else {
          if(document.getElementById('jml_telur')) {
     document.getElementById('jml_telur').value = "";
         }
