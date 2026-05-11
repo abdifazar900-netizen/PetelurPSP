@@ -212,15 +212,15 @@ function sendData(action) {
           document.getElementById('display_usia').innerText = "-";
         }
           // Tambahkan ini di dalam function sendData(action)
-else if (action === 'simpanMasalah') {
-  const tgl = document.getElementById('tgl_masalah').value;
-  const knd = document.getElementById('kandang_masalah').value;
-  const msl = document.getElementById('masalah').value; // Mengambil dari input 'masalah'
-  const ket = document.getElementById('ket_masalah').value; // Mengambil dari textarea 'ket_masalah'
-  
-  // Pastikan msl_ayam mengambil 'msl' dan masalah mengambil 'ket'
-  url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
-}
+if (action === 'simpanMasalah') {
+    const tgl = document.getElementById('tgl_masalah').value;
+    const knd = document.getElementById('kandang_masalah').value;
+    const msl = document.getElementById('masalah').value;
+    const ket = document.getElementById('ket_masalah').value;
+    
+    // Ini yang membuat data terisi di GSheet (harus cocok dengan Code.gs)
+    url += `&tgl_masalah=${tgl}&kandang_masalah=${knd}&msl_ayam=${msl}&masalah=${ket}`;
+  }
 
 // --- BAGIAN PEMBERSIHAN FORM DI DALAM .then ---
 if (action === 'simpanMasalah') {
